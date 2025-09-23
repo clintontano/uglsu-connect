@@ -37,14 +37,6 @@ const quickLinks = [
     features: ['Seminars', 'Workshops', 'Networking', 'Academic Events']
   },
   {
-    title: 'Membership Portal',
-    description: 'Join UGLSU and access exclusive member benefits',
-    icon: UserPlus,
-    href: '/membership',
-    color: 'accent',
-    features: ['Student Benefits', 'Exclusive Access', 'Networking', 'Resources']
-  },
-  {
     title: 'Notices & Updates',
     description: 'Important announcements and union communications',
     icon: Bell,

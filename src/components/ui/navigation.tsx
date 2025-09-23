@@ -22,7 +22,7 @@ const navItems = [
   { name: 'Digital Library', href: '/library', icon: Library },
   { name: 'Legally Speakin', href: '/blog', icon: BookOpen },
   { name: 'Notices', href: '/notices', icon: Bell },
-  { name: 'Membership', href: '/membership', icon: UserPlus },
+  
   { name: 'Contact', href: '/contact', icon: Phone },
 ];
 
@@ -73,12 +73,6 @@ export const Navigation: React.FC<NavigationProps> = ({ className }) => {
             })}
           </div>
 
-          {/* CTA Button */}
-          <div className="hidden lg:block">
-            <Button variant="accent" size="sm" asChild>
-              <Link to="/membership">Join UGLSU</Link>
-            </Button>
-          </div>
 
           {/* Mobile menu button */}
           <div className="lg:hidden">
@@ -116,13 +110,6 @@ export const Navigation: React.FC<NavigationProps> = ({ className }) => {
                   </Link>
                 );
               })}
-              <div className="pt-4">
-                <Button variant="accent" size="sm" className="w-full" asChild>
-                  <Link to="/membership" onClick={() => setIsMobileMenuOpen(false)}>
-                    Join UGLSU
-                  </Link>
-                </Button>
-              </div>
             </div>
           </div>
         )}

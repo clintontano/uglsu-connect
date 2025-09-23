@@ -28,7 +28,7 @@ const footerSections = [
     title: 'Resources',
     links: [
       { name: 'Legally Speakin Blog', href: '/blog' },
-      { name: 'Membership Benefits', href: '/membership' },
+      
       { name: 'Student Services', href: '/services' },
       { name: 'Academic Support', href: '/support' },
     ]
