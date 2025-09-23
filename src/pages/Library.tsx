@@ -106,13 +106,13 @@ const Library = () => {
       
       <main>
         {/* Hero Section */}
-        <section className="bg-gradient-hero text-hero-text py-20">
+        <section className="bg-gradient-hero py-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-4xl mx-auto">
-              <h1 className="text-display font-heading font-bold mb-6">
+              <h1 className="text-display font-heading font-bold mb-6 text-foreground">
                 UGLSU Digital Library
               </h1>
-              <p className="text-xl mb-8 leading-relaxed">
+              <p className="text-xl mb-8 leading-relaxed text-muted-foreground">
                 Access a comprehensive collection of legal resources, case studies, past papers, 
                 and academic materials curated for University of Ghana law students.
               </p>

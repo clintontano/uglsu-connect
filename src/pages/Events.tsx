@@ -111,12 +111,12 @@ const Events = () => {
       
       <main>
         {/* Hero Section */}
-        <section className="bg-gradient-primary text-primary-foreground py-20">
+        <section className="bg-gradient-primary py-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 className="text-display font-heading font-bold mb-6">
+            <h1 className="text-display font-heading font-bold mb-6 text-foreground">
               Events & Calendar
             </h1>
-            <p className="text-xl max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl max-w-3xl mx-auto leading-relaxed text-muted-foreground">
               Stay connected with the UGLSU community through our diverse range of academic, 
               professional, and social events designed to enhance your law school experience.
             </p>
