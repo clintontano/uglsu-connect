@@ -29,13 +29,6 @@ export const HeroSection: React.FC = () => {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-            <Button variant="hero" size="lg" asChild>
-              <Link to="/membership" className="group">
-                Join Our Community
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </Button>
-            
             <Button variant="professional" size="lg" asChild>
               <Link to="/about">Learn More About Us</Link>
             </Button>
