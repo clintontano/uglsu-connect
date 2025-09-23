@@ -6,7 +6,7 @@ import heroImage from '@/assets/hero-image.jpg';
 
 export const HeroSection: React.FC = () => {
   return (
-    <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden pt-16 md:pt-0">
       {/* Background Image with Overlay */}
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -18,12 +18,12 @@ export const HeroSection: React.FC = () => {
       {/* Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-hero font-heading font-bold text-hero-text mb-6">
+          <h1 className="text-3xl sm:text-4xl md:text-hero font-heading font-bold text-hero-text mb-6 text-center">
             University of Ghana
             <span className="block text-accent">Law Students' Union</span>
           </h1>
           
-          <p className="text-xl md:text-2xl text-hero-text/90 mb-8 leading-relaxed max-w-3xl mx-auto">
+          <p className="text-lg sm:text-xl md:text-2xl text-hero-text/90 mb-8 leading-relaxed max-w-3xl mx-auto text-center">
             Advocating for justice, promoting legal excellence, and building a supportive 
             community of future legal professionals at the University of Ghana School of Law.
           </p>

@@ -145,7 +145,20 @@ export const Footer: React.FC = () => {
         {/* Bottom Footer */}
         <div className="flex flex-col md:flex-row justify-between items-center">
           <div className="text-sm text-primary-foreground/80 mb-4 md:mb-0">
-            © 2024 University of Ghana Law Students' Union. All rights reserved.
+            © 2025 University of Ghana Law Students' Union. All rights reserved.
+          </div>
+
+          {/* Powered by RoomBerl */}
+          <div className="text-sm text-primary-foreground/80 mb-4 md:mb-0">
+            Powered by{" "}
+            <a 
+              href="https://roomberl.com" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-accent hover:text-accent/80 transition-colors underline"
+            >
+              RoomBerl
+            </a>
           </div>
 
           {/* Social Links */}
