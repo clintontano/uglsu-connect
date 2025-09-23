@@ -60,8 +60,12 @@ export const Footer: React.FC = () => {
           {/* Brand Section */}
           <div className="lg:col-span-1">
             <div className="flex items-center space-x-3 mb-6">
-              <div className="w-12 h-12 bg-accent rounded-lg flex items-center justify-center">
-                <span className="text-accent-foreground font-bold text-xl">U</span>
+              <div className="w-12 h-12 rounded-lg overflow-hidden">
+                <img 
+                  src="/uglsu-logo.png" 
+                  alt="UGLSU Logo" 
+                  className="w-full h-full object-cover"
+                />
               </div>
               <div>
                 <h3 className="text-xl font-heading font-bold">UGLSU</h3>
