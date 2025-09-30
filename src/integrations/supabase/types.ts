@@ -14,16 +14,201 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      blog_posts: {
+        Row: {
+          author: string
+          category: string
+          content: string
+          created_at: string | null
+          date: string
+          excerpt: string
+          id: string
+          image_url: string | null
+          read_time: string
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          author: string
+          category: string
+          content: string
+          created_at?: string | null
+          date: string
+          excerpt: string
+          id?: string
+          image_url?: string | null
+          read_time: string
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          author?: string
+          category?: string
+          content?: string
+          created_at?: string | null
+          date?: string
+          excerpt?: string
+          id?: string
+          image_url?: string | null
+          read_time?: string
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      events: {
+        Row: {
+          attendees: number | null
+          created_at: string | null
+          date: string
+          description: string | null
+          id: string
+          location: string
+          registration_open: boolean | null
+          status: string | null
+          time: string
+          title: string
+          type: string
+          updated_at: string | null
+        }
+        Insert: {
+          attendees?: number | null
+          created_at?: string | null
+          date: string
+          description?: string | null
+          id?: string
+          location: string
+          registration_open?: boolean | null
+          status?: string | null
+          time: string
+          title: string
+          type: string
+          updated_at?: string | null
+        }
+        Update: {
+          attendees?: number | null
+          created_at?: string | null
+          date?: string
+          description?: string | null
+          id?: string
+          location?: string
+          registration_open?: boolean | null
+          status?: string | null
+          time?: string
+          title?: string
+          type?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      library_documents: {
+        Row: {
+          author: string | null
+          course: string | null
+          created_at: string | null
+          downloads: number | null
+          id: string
+          tags: string[] | null
+          title: string
+          type: string
+          updated_at: string | null
+          year: number | null
+        }
+        Insert: {
+          author?: string | null
+          course?: string | null
+          created_at?: string | null
+          downloads?: number | null
+          id?: string
+          tags?: string[] | null
+          title: string
+          type: string
+          updated_at?: string | null
+          year?: number | null
+        }
+        Update: {
+          author?: string | null
+          course?: string | null
+          created_at?: string | null
+          downloads?: number | null
+          id?: string
+          tags?: string[] | null
+          title?: string
+          type?: string
+          updated_at?: string | null
+          year?: number | null
+        }
+        Relationships: []
+      }
+      notices: {
+        Row: {
+          created_at: string | null
+          date: string
+          description: string
+          download_link: string | null
+          id: string
+          is_urgent: boolean | null
+          title: string
+          type: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          date: string
+          description: string
+          download_link?: string | null
+          id?: string
+          is_urgent?: boolean | null
+          title: string
+          type: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          date?: string
+          description?: string
+          download_link?: string | null
+          id?: string
+          is_urgent?: boolean | null
+          title?: string
+          type?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string | null
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      is_admin: {
+        Args: { user_id: string }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +335,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+    },
   },
 } as const
