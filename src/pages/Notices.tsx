@@ -1,61 +1,77 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Navigation } from '@/components/ui/navigation';
 import { Footer } from '@/components/ui/footer';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Calendar, Pin, Download, AlertTriangle } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
+
+interface Notice {
+  id: string;
+  title: string;
+  description: string;
+  date: string;
+  type: string;
+  is_urgent: boolean;
+  download_link: string | null;
+}
 
 const Notices = () => {
-  const urgentNotices = [
-    {
-      id: 1,
-      title: "Emergency General Meeting - January 25, 2024",
-      description: "All UGLSU members are required to attend the emergency general meeting to discuss upcoming election procedures.",
-      date: "2024-01-20",
-      type: "urgent"
-    }
-  ];
+  const [urgentNotices, setUrgentNotices] = useState<Notice[]>([]);
+  const [regularNotices, setRegularNotices] = useState<Notice[]>([]);
+  const [loading, setLoading] = useState(true);
+  const { toast } = useToast();
 
-  const regularNotices = [
-    {
-      id: 2,
-      title: "Second Semester Examination Timetable Released",
-      description: "The examination timetable for the second semester has been published. Students are advised to check for any conflicts.",
-      date: "2024-01-18",
-      type: "academic",
-      downloadUrl: "#"
-    },
-    {
-      id: 3,
-      title: "UGLSU Executive Committee Meeting Minutes - January 2024",
-      description: "Minutes from the January executive committee meeting are now available for member review.",
-      date: "2024-01-15",
-      type: "administrative",
-      downloadUrl: "#"
-    },
-    {
-      id: 4,
-      title: "Legal Aid Clinic Schedule Updated",
-      description: "New schedule for the student legal aid clinic sessions. Sign-up required for participation.",
-      date: "2024-01-12",
-      type: "event"
-    },
-    {
-      id: 5,
-      title: "Library Resource Access Changes",
-      description: "Important updates to digital library access procedures and new resource additions.",
-      date: "2024-01-10",
-      type: "information"
-    },
-    {
-      id: 6,
-      title: "Moot Court Competition Registration Open",
-      description: "Registration is now open for the annual inter-university moot court competition. Deadline: February 15, 2024.",
-      date: "2024-01-08",
-      type: "event"
+  useEffect(() => {
+    fetchNotices();
+
+    // Subscribe to real-time updates
+    const channel = supabase
+      .channel('notices-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'notices'
+        },
+        () => {
+          fetchNotices();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
+
+  const fetchNotices = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('notices')
+        .select('*')
+        .order('date', { ascending: false });
+
+      if (error) throw error;
+
+      const urgent = data?.filter(notice => notice.is_urgent) || [];
+      const regular = data?.filter(notice => !notice.is_urgent) || [];
+
+      setUrgentNotices(urgent);
+      setRegularNotices(regular);
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: "Failed to load notices. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
     }
-  ];
+  };
 
   const getNoticeIcon = (type: string) => {
     switch (type) {
@@ -82,6 +98,18 @@ const Notices = () => {
         return 'outline';
     }
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Navigation />
+        <div className="flex items-center justify-center h-96">
+          <p className="text-muted-foreground">Loading notices...</p>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -149,11 +177,16 @@ const Notices = () => {
                         <Calendar className="w-4 h-4" />
                         <span>{new Date(notice.date).toLocaleDateString()}</span>
                       </div>
-                      {notice.downloadUrl && (
-                        <button className="flex items-center space-x-1 text-sm text-primary hover:underline">
+                      {notice.download_link && (
+                        <a 
+                          href={notice.download_link} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="flex items-center space-x-1 text-sm text-primary hover:underline"
+                        >
                           <Download className="w-4 h-4" />
                           <span>Download</span>
-                        </button>
+                        </a>
                       )}
                     </div>
                   </CardContent>

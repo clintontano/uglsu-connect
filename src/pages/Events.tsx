@@ -1,86 +1,25 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Navigation } from '@/components/ui/navigation';
 import { Footer } from '@/components/ui/footer';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Calendar, Clock, MapPin, Users, ExternalLink } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
 
-const upcomingEvents = [
-  {
-    id: 1,
-    title: 'Constitutional Law Moot Court Competition',
-    date: '2024-03-15',
-    time: '09:00 AM',
-    location: 'UG Law Faculty Moot Court',
-    type: 'Competition',
-    attendees: 45,
-    description: 'Annual moot court competition focusing on constitutional law cases. Open to all law students.',
-    status: 'upcoming',
-    registrationOpen: true
-  },
-  {
-    id: 2,
-    title: 'Career Development Workshop: Legal Practice Management',
-    date: '2024-03-22',
-    time: '02:00 PM',
-    location: 'Law Faculty Auditorium',
-    type: 'Workshop',
-    attendees: 78,
-    description: 'Learn essential skills for managing a successful legal practice from industry experts.',
-    status: 'upcoming',
-    registrationOpen: true
-  },
-  {
-    id: 3,
-    title: 'UGLSU General Assembly',
-    date: '2024-03-28',
-    time: '10:00 AM',
-    location: 'Great Hall, University of Ghana',
-    type: 'Meeting',
-    attendees: 156,
-    description: 'Mandatory meeting for all UGLSU members to discuss important union matters.',
-    status: 'upcoming',
-    registrationOpen: false
-  },
-  {
-    id: 4,
-    title: 'Guest Lecture: International Human Rights Law',
-    date: '2024-04-05',
-    time: '11:00 AM',
-    location: 'Law Faculty Lecture Hall 1',
-    type: 'Lecture',
-    attendees: 92,
-    description: 'Distinguished guest speaker from the UN Human Rights Commission.',
-    status: 'upcoming',
-    registrationOpen: true
-  }
-];
-
-const pastEvents = [
-  {
-    id: 5,
-    title: 'Legal Aid Clinic Launch',
-    date: '2024-02-14',
-    time: '03:00 PM',
-    location: 'Law Faculty',
-    type: 'Launch',
-    attendees: 134,
-    description: 'Official launch of the student-run legal aid clinic.',
-    status: 'completed'
-  },
-  {
-    id: 6,
-    title: 'Orientation Week for New Students',
-    date: '2024-01-08',
-    time: '09:00 AM',
-    location: 'Various Locations',
-    type: 'Orientation',
-    attendees: 67,
-    description: 'Welcome event for new law students starting their academic journey.',
-    status: 'completed'
-  }
-];
+interface Event {
+  id: string;
+  title: string;
+  date: string;
+  time: string;
+  location: string;
+  type: string;
+  attendees: number;
+  description: string;
+  status: string;
+  registration_open: boolean;
+}
 
 const getEventTypeColor = (type: string) => {
   switch (type) {
@@ -105,6 +44,80 @@ const formatDate = (dateString: string) => {
 };
 
 const Events = () => {
+  const [upcomingEvents, setUpcomingEvents] = useState<Event[]>([]);
+  const [pastEvents, setPastEvents] = useState<Event[]>([]);
+  const [loading, setLoading] = useState(true);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    fetchEvents();
+
+    // Subscribe to real-time updates
+    const channel = supabase
+      .channel('events-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'events'
+        },
+        () => {
+          fetchEvents();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
+
+  const fetchEvents = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('events')
+        .select('*')
+        .order('date', { ascending: true });
+
+      if (error) throw error;
+
+      const now = new Date();
+      const upcoming = data?.filter(event => {
+        const eventDate = new Date(event.date);
+        return eventDate >= now && event.status !== 'completed';
+      }) || [];
+      
+      const past = data?.filter(event => {
+        const eventDate = new Date(event.date);
+        return eventDate < now || event.status === 'completed';
+      }) || [];
+
+      setUpcomingEvents(upcoming);
+      setPastEvents(past);
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: "Failed to load events. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Navigation />
+        <div className="flex items-center justify-center h-96">
+          <p className="text-muted-foreground">Loading events...</p>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
@@ -144,7 +157,7 @@ const Events = () => {
                           <Badge className={getEventTypeColor(event.type)}>
                             {event.type}
                           </Badge>
-                          {event.registrationOpen && (
+                          {event.registration_open && (
                             <Badge variant="outline" className="ml-2 text-success border-success">
                               Registration Open
                             </Badge>
@@ -185,7 +198,7 @@ const Events = () => {
                           <Button variant="outline" size="sm">
                             View Details
                           </Button>
-                          {event.registrationOpen ? (
+                          {event.registration_open ? (
                             <Button variant="hero" size="sm">
                               Register Now
                             </Button>

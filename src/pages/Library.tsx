@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Navigation } from '@/components/ui/navigation';
 import { Footer } from '@/components/ui/footer';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -16,89 +16,104 @@ import {
   Eye, 
   Filter 
 } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
 
-const libraryItems = [
-  {
-    id: 1,
-    title: 'Constitutional Law Case Studies',
-    type: 'Case Law',
-    author: 'Prof. Kwame Frimpong',
-    year: '2024',
-    course: 'Constitutional Law',
-    downloads: 234,
-    tags: ['Constitutional', 'Case Studies', 'Ghana Law']
-  },
-  {
-    id: 2,
-    title: 'Contract Law Principles and Practice',
-    type: 'Article',
-    author: 'Dr. Akosua Mensah',
-    year: '2023',
-    course: 'Contract Law',
-    downloads: 189,
-    tags: ['Contracts', 'Commercial Law', 'Legal Principles']
-  },
-  {
-    id: 3,
-    title: 'Criminal Procedure Past Papers 2020-2023',
-    type: 'Past Papers',
-    author: 'UGLSU Academic Committee',
-    year: '2023',
-    course: 'Criminal Procedure',
-    downloads: 456,
-    tags: ['Exam Papers', 'Criminal Law', 'Study Guide']
-  },
-  {
-    id: 4,
-    title: 'Introduction to Legal Research Methods',
-    type: 'Study Guide',
-    author: 'Prof. Yaw Asante',
-    year: '2024',
-    course: 'Legal Research',
-    downloads: 167,
-    tags: ['Research', 'Methodology', 'Academic Writing']
-  },
-  {
-    id: 5,
-    title: 'Ghana Supreme Court Landmark Decisions',
-    type: 'Case Law',
-    author: 'Justice Sarah Opoku',
-    year: '2024',
-    course: 'Jurisprudence',
-    downloads: 298,
-    tags: ['Supreme Court', 'Precedent', 'Ghana Law']
-  },
-  {
-    id: 6,
-    title: 'Corporate Law Lecture Notes - Level 400',
-    type: 'Lecture Notes',
-    author: 'Dr. Kofi Boateng',
-    year: '2024',
-    course: 'Corporate Law',
-    downloads: 134,
-    tags: ['Corporate', 'Business Law', 'Lecture Notes']
-  }
-];
+interface LibraryDocument {
+  id: string;
+  title: string;
+  type: string;
+  author: string | null;
+  year: number | null;
+  course: string | null;
+  downloads: number;
+  tags: string[];
+}
 
 const resourceTypes = [
-  { type: 'All', icon: BookOpen, count: libraryItems.length },
-  { type: 'Case Law', icon: Gavel, count: libraryItems.filter(item => item.type === 'Case Law').length },
-  { type: 'Article', icon: FileText, count: libraryItems.filter(item => item.type === 'Article').length },
-  { type: 'Past Papers', icon: GraduationCap, count: libraryItems.filter(item => item.type === 'Past Papers').length },
-  { type: 'Study Guide', icon: BookOpen, count: libraryItems.filter(item => item.type === 'Study Guide').length },
+  { type: 'All', icon: BookOpen },
+  { type: 'Case Law', icon: Gavel },
+  { type: 'Article', icon: FileText },
+  { type: 'Past Papers', icon: GraduationCap },
+  { type: 'Study Guide', icon: BookOpen },
+  { type: 'Lecture Notes', icon: FileText },
 ];
 
 const Library = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedType, setSelectedType] = useState('All');
+  const [libraryItems, setLibraryItems] = useState<LibraryDocument[]>([]);
+  const [loading, setLoading] = useState(true);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    fetchDocuments();
+
+    // Subscribe to real-time updates
+    const channel = supabase
+      .channel('library-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'library_documents'
+        },
+        () => {
+          fetchDocuments();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
+
+  const fetchDocuments = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('library_documents')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      setLibraryItems(data || []);
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: "Failed to load library documents. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const filteredItems = libraryItems.filter(item => {
     const matchesSearch = item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         item.author.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         item.course.toLowerCase().includes(searchTerm.toLowerCase());
+                         item.author?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         item.course?.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesType = selectedType === 'All' || item.type === selectedType;
     return matchesSearch && matchesType;
   });
+
+  const getCountForType = (type: string) => {
+    if (type === 'All') return libraryItems.length;
+    return libraryItems.filter(item => item.type === type).length;
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Navigation />
+        <div className="flex items-center justify-center h-96">
+          <p className="text-muted-foreground">Loading library...</p>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -149,7 +164,7 @@ const Library = () => {
                   <type.icon className="w-4 h-4" />
                   <span>{type.type}</span>
                   <Badge variant="secondary" className="ml-2">
-                    {type.count}
+                    {getCountForType(type.type)}
                   </Badge>
                 </Button>
               ))}
@@ -179,8 +194,8 @@ const Library = () => {
                   <CardContent>
                     <div className="space-y-3">
                       <div>
-                        <p className="text-sm text-muted-foreground">Author: {item.author}</p>
-                        <p className="text-sm text-muted-foreground">Course: {item.course}</p>
+                        <p className="text-sm text-muted-foreground">Author: {item.author || 'N/A'}</p>
+                        <p className="text-sm text-muted-foreground">Course: {item.course || 'N/A'}</p>
                       </div>
                       
                       <div className="flex flex-wrap gap-1">

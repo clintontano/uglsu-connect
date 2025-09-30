@@ -1,41 +1,88 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Navigation } from '@/components/ui/navigation';
 import { Footer } from '@/components/ui/footer';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Calendar, User, ArrowRight } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
+
+interface BlogPost {
+  id: string;
+  title: string;
+  excerpt: string;
+  author: string;
+  date: string;
+  category: string;
+  read_time: string;
+  content: string;
+  image_url: string | null;
+}
 
 const Blog = () => {
-  const featuredPosts = [
-    {
-      id: 1,
-      title: "Understanding Constitutional Law in Ghana",
-      excerpt: "A comprehensive guide to the fundamental principles of constitutional law as it applies in the Ghanaian legal system.",
-      author: "Kwame Asante",
-      date: "2024-01-15",
-      category: "Constitutional Law",
-      readTime: "8 min read"
-    },
-    {
-      id: 2,
-      title: "Recent Developments in Commercial Law",
-      excerpt: "An analysis of recent court decisions and their impact on commercial legal practice in Ghana.",
-      author: "Akosua Mensah",
-      date: "2024-01-10",
-      category: "Commercial Law",
-      readTime: "6 min read"
-    },
-    {
-      id: 3,
-      title: "Legal Research Methods for Law Students",
-      excerpt: "Essential techniques and resources for conducting effective legal research in the digital age.",
-      author: "Kweku Osei",
-      date: "2024-01-05",
-      category: "Legal Education",
-      readTime: "10 min read"
+  const [featuredPosts, setFeaturedPosts] = useState<BlogPost[]>([]);
+  const [loading, setLoading] = useState(true);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    fetchPosts();
+
+    // Subscribe to real-time updates
+    const channel = supabase
+      .channel('blog-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'blog_posts'
+        },
+        () => {
+          fetchPosts();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
+
+  const fetchPosts = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('blog_posts')
+        .select('*')
+        .order('date', { ascending: false })
+        .limit(6);
+
+      if (error) throw error;
+      setFeaturedPosts(data || []);
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: "Failed to load blog posts. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
     }
-  ];
+  };
+
+  const categories = Array.from(new Set(featuredPosts.map(post => post.category)));
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Navigation />
+        <div className="flex items-center justify-center h-96">
+          <p className="text-muted-foreground">Loading blog posts...</p>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -62,7 +109,7 @@ const Blog = () => {
                   <CardHeader>
                     <div className="flex items-center justify-between mb-2">
                       <Badge variant="secondary">{post.category}</Badge>
-                      <span className="text-sm text-muted-foreground">{post.readTime}</span>
+                      <span className="text-sm text-muted-foreground">{post.read_time}</span>
                     </div>
                     <CardTitle className="group-hover:text-primary transition-colors">
                       {post.title}
@@ -89,29 +136,22 @@ const Blog = () => {
           </section>
 
           {/* Categories */}
-          <section className="mb-16">
-            <h2 className="text-2xl font-heading font-semibold mb-8">Browse by Category</h2>
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {[
-                "Constitutional Law",
-                "Commercial Law", 
-                "Criminal Law",
-                "Legal Education",
-                "Student Life",
-                "Career Guidance",
-                "Legal Tech",
-                "International Law"
-              ].map((category) => (
-                <Button
-                  key={category}
-                  variant="outline"
-                  className="h-auto p-4 justify-start"
-                >
-                  {category}
-                </Button>
-              ))}
-            </div>
-          </section>
+          {categories.length > 0 && (
+            <section className="mb-16">
+              <h2 className="text-2xl font-heading font-semibold mb-8">Browse by Category</h2>
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                {categories.map((category) => (
+                  <Button
+                    key={category}
+                    variant="outline"
+                    className="h-auto p-4 justify-start"
+                  >
+                    {category}
+                  </Button>
+                ))}
+              </div>
+            </section>
+          )}
 
           {/* Call to Action */}
           <section className="text-center bg-muted/50 rounded-lg p-8">
