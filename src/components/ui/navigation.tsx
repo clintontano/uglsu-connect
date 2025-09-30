@@ -12,8 +12,7 @@ import {
   UserPlus, 
   Phone,
   Menu,
-  X,
-  Shield
+  X
 } from 'lucide-react';
 
 const navItems = [
@@ -24,7 +23,6 @@ const navItems = [
   { name: 'Legally Speakin', href: '/blog', icon: BookOpen },
   { name: 'Notices', href: '/notices', icon: Bell },
   { name: 'Contact', href: '/contact', icon: Phone },
-  { name: 'Admin', href: '/auth', icon: Shield },
 ];
 
 interface NavigationProps {

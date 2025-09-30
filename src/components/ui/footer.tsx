@@ -22,6 +22,7 @@ const footerSections = [
       { name: 'Executive Committee', href: '/about#executive' },
       { name: 'Digital Library', href: '/library' },
       { name: 'Events Calendar', href: '/events' },
+      { name: 'Admin Access', href: '/auth' },
     ]
   },
   {
