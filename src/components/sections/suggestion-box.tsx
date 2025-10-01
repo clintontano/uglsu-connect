@@ -45,7 +45,7 @@ export const SuggestionBoxSection: React.FC = () => {
             </div>
 
             <Button variant="professional" size="lg" asChild>
-              <Link to="/suggestion-box" className="group flex items-center justify-center space-x-2">
+              <Link to="/suggestions" className="group flex items-center justify-center space-x-2">
                 <span>Submit Your Suggestion</span>
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Link>
