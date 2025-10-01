@@ -351,10 +351,10 @@ const About = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button variant="hero" size="lg" asChild>
-                <Link to="/membership" className="group">
-                  Join UGLSU Today
+                <a href="https://law.ug.edu.gh/" target="_blank" rel="noopener noreferrer" className="group">
+                  Join The UGLSU
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </Link>
+                </a>
               </Button>
               <Button variant="professional" size="lg" asChild>
                 <Link to="/contact">Contact Us</Link>
