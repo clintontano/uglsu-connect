@@ -11,7 +11,20 @@ import {
   Eye, 
   Mail, 
   Linkedin, 
-  ArrowRight 
+  ArrowRight,
+  DollarSign,
+  Heart,
+  BookOpen,
+  Calendar,
+  Megaphone,
+  Radio,
+  Trophy,
+  Activity,
+  Globe,
+  BrainCircuit,
+  Scale,
+  Library,
+  PenTool
 } from 'lucide-react';
 
 const executiveMembers = [
@@ -138,6 +151,190 @@ const About = () => {
                   </CardContent>
                 </Card>
               ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Committees Section */}
+        <section className="py-20">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 className="text-display font-heading font-bold mb-4">
+                LSU Committees at a Glance
+              </h2>
+              <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+                Our dedicated committees work tirelessly to serve the law student community across various essential functions.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <Card className="shadow-card border-0">
+                <CardContent className="p-6">
+                  <div className="flex items-center mb-4">
+                    <DollarSign className="w-6 h-6 text-accent mr-3" />
+                    <h3 className="font-heading font-semibold text-lg">Sponsorship Committee</h3>
+                  </div>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    This committee is responsible for generating funds for the Union by seeking sponsorships and other external support. They ensure transparency by working closely with the Audit Board and reporting all funds raised.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card className="shadow-card border-0">
+                <CardContent className="p-6">
+                  <div className="flex items-center mb-4">
+                    <Heart className="w-6 h-6 text-accent mr-3" />
+                    <h3 className="font-heading font-semibold text-lg">Welfare Committee</h3>
+                  </div>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    Focused on the well-being of students, this committee works with authorities to maintain facilities like lecture halls and washrooms, and to ensure high hygiene standards at the School of Law.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card className="shadow-card border-0">
+                <CardContent className="p-6">
+                  <div className="flex items-center mb-4">
+                    <BookOpen className="w-6 h-6 text-accent mr-3" />
+                    <h3 className="font-heading font-semibold text-lg">Academic Affairs Committee</h3>
+                  </div>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    They handle academic concerns raised by students, provide reliable information on academic procedures, and connect new students with mentors. The committee also ensures access to academic materials.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card className="shadow-card border-0">
+                <CardContent className="p-6">
+                  <div className="flex items-center mb-4">
+                    <Calendar className="w-6 h-6 text-accent mr-3" />
+                    <h3 className="font-heading font-semibold text-lg">Events Committee</h3>
+                  </div>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    This team organizes and executes all official programs and activities of the Union. They handle the planning, coordination, and arrangements needed to make events successful.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card className="shadow-card border-0">
+                <CardContent className="p-6">
+                  <div className="flex items-center mb-4">
+                    <Megaphone className="w-6 h-6 text-accent mr-3" />
+                    <h3 className="font-heading font-semibold text-lg">Publicity Committee</h3>
+                  </div>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    The publicity team manages communication and advertising for the Union. Using social media, print, and other channels, they keep students informed about events and announcements.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card className="shadow-card border-0">
+                <CardContent className="p-6">
+                  <div className="flex items-center mb-4">
+                    <Radio className="w-6 h-6 text-accent mr-3" />
+                    <h3 className="font-heading font-semibold text-lg">Radio Broadcast Committee</h3>
+                  </div>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    This committee produces radio programs on legal topics. They research, prepare, and host discussions that educate both students and the wider public on important legal issues.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card className="shadow-card border-0">
+                <CardContent className="p-6">
+                  <div className="flex items-center mb-4">
+                    <Users className="w-6 h-6 text-accent mr-3" />
+                    <h3 className="font-heading font-semibold text-lg">Legal Outreach Committee</h3>
+                  </div>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    They plan and organize annual outreach programs where lawyers and resource persons educate students and the public on selected legal topics.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card className="shadow-card border-0">
+                <CardContent className="p-6">
+                  <div className="flex items-center mb-4">
+                    <Trophy className="w-6 h-6 text-accent mr-3" />
+                    <h3 className="font-heading font-semibold text-lg">External Competitions Committee</h3>
+                  </div>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    This committee prepares students for external contests like moot courts and quizzes. They handle registrations, training, and strategy while reporting on team performance after competitions.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card className="shadow-card border-0">
+                <CardContent className="p-6">
+                  <div className="flex items-center mb-4">
+                    <Activity className="w-6 h-6 text-accent mr-3" />
+                    <h3 className="font-heading font-semibold text-lg">Sports Committee</h3>
+                  </div>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    Dedicated to health and fitness, this committee organizes sports events such as Sports Day and aerobics sessions. They also share regular health tips to encourage wellness among students.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card className="shadow-card border-0">
+                <CardContent className="p-6">
+                  <div className="flex items-center mb-4">
+                    <Globe className="w-6 h-6 text-accent mr-3" />
+                    <h3 className="font-heading font-semibold text-lg">External Affairs Committee</h3>
+                  </div>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    They manage the Union's external relations, including initiatives like Personality of the Month and class projects, while supporting executives on external engagements.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card className="shadow-card border-0">
+                <CardContent className="p-6">
+                  <div className="flex items-center mb-4">
+                    <BrainCircuit className="w-6 h-6 text-accent mr-3" />
+                    <h3 className="font-heading font-semibold text-lg">Counselling & Mentorship Committee</h3>
+                  </div>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    This committee supports student mental health and growth by organizing counseling sessions, providing wellness tips, and running mentorship programs with regular reviews.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card className="shadow-card border-0">
+                <CardContent className="p-6">
+                  <div className="flex items-center mb-4">
+                    <Scale className="w-6 h-6 text-accent mr-3" />
+                    <h3 className="font-heading font-semibold text-lg">Moot & Advocacy Committee</h3>
+                  </div>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    They organize internal moot court competitions, provide advocacy training, and help students sharpen their legal reasoning and courtroom skills.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card className="shadow-card border-0">
+                <CardContent className="p-6">
+                  <div className="flex items-center mb-4">
+                    <Library className="w-6 h-6 text-accent mr-3" />
+                    <h3 className="font-heading font-semibold text-lg">Library & Editorial Committee</h3>
+                  </div>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    This group works with other committees to produce newsletters and bulletins for students, while also liaising with library staff to address student concerns.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card className="shadow-card border-0">
+                <CardContent className="p-6">
+                  <div className="flex items-center mb-4">
+                    <PenTool className="w-6 h-6 text-accent mr-3" />
+                    <h3 className="font-heading font-semibold text-lg">Blog & Website Committee</h3>
+                  </div>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    Responsible for Legally Speakin, this committee edits and publishes student-written articles and fosters a writing culture through workshops and other initiatives.
+                  </p>
+                </CardContent>
+              </Card>
             </div>
           </div>
         </section>
