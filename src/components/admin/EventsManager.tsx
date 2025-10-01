@@ -16,7 +16,7 @@ interface Event {
   date: string;
   time: string;
   location: string;
-  type: string;
+  flyer_url: string | null;
   attendees: number;
   status: string;
   registration_open: boolean;
@@ -31,11 +31,12 @@ const EventsManager = () => {
     date: "",
     time: "",
     location: "",
-    type: "",
+    flyer_url: "",
     attendees: 0,
     status: "upcoming",
     registration_open: true,
   });
+  const [flyerFile, setFlyerFile] = useState<File | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -58,10 +59,36 @@ const EventsManager = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    let flyerUrl = formData.flyer_url;
+
+    // Upload flyer if provided
+    if (flyerFile) {
+      const fileExt = flyerFile.name.split('.').pop();
+      const fileName = `${Math.random()}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('event-flyers')
+        .upload(filePath, flyerFile);
+
+      if (uploadError) {
+        toast({ title: "Error", description: uploadError.message, variant: "destructive" });
+        return;
+      }
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('event-flyers')
+        .getPublicUrl(filePath);
+
+      flyerUrl = publicUrl;
+    }
+
+    const submitData = { ...formData, flyer_url: flyerUrl || null };
+
     if (editingId) {
       const { error } = await supabase
         .from("events")
-        .update(formData)
+        .update(submitData)
         .eq("id", editingId);
 
       if (error) {
@@ -72,7 +99,7 @@ const EventsManager = () => {
         fetchEvents();
       }
     } else {
-      const { error } = await supabase.from("events").insert([formData]);
+      const { error } = await supabase.from("events").insert([submitData]);
 
       if (error) {
         toast({ title: "Error", description: error.message, variant: "destructive" });
@@ -92,11 +119,12 @@ const EventsManager = () => {
       date: event.date,
       time: event.time,
       location: event.location,
-      type: event.type,
+      flyer_url: event.flyer_url || "",
       attendees: event.attendees,
       status: event.status,
       registration_open: event.registration_open,
     });
+    setFlyerFile(null);
   };
 
   const handleDelete = async (id: string) => {
@@ -120,11 +148,12 @@ const EventsManager = () => {
       date: "",
       time: "",
       location: "",
-      type: "",
+      flyer_url: "",
       attendees: 0,
       status: "upcoming",
       registration_open: true,
     });
+    setFlyerFile(null);
   };
 
   return (
@@ -135,23 +164,25 @@ const EventsManager = () => {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>Title</Label>
-                <Input
-                  value={formData.title}
-                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <Label>Type</Label>
-                <Input
-                  value={formData.type}
-                  onChange={(e) => setFormData({ ...formData, type: e.target.value })}
-                  required
-                />
-              </div>
+            <div className="space-y-2">
+              <Label>Title</Label>
+              <Input
+                value={formData.title}
+                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>Event Flyer (required)</Label>
+              <Input
+                type="file"
+                accept="image/*"
+                onChange={(e) => setFlyerFile(e.target.files?.[0] || null)}
+                required={!editingId && !formData.flyer_url}
+              />
+              {formData.flyer_url && (
+                <p className="text-sm text-muted-foreground">Current: {formData.flyer_url}</p>
+              )}
             </div>
             <div className="space-y-2">
               <Label>Description</Label>
@@ -165,6 +196,7 @@ const EventsManager = () => {
               <div className="space-y-2">
                 <Label>Date</Label>
                 <Input
+                  type="date"
                   value={formData.date}
                   onChange={(e) => setFormData({ ...formData, date: e.target.value })}
                   required
@@ -212,7 +244,7 @@ const EventsManager = () => {
                 <TableHead>Title</TableHead>
                 <TableHead>Date</TableHead>
                 <TableHead>Location</TableHead>
-                <TableHead>Type</TableHead>
+                <TableHead>Has Flyer</TableHead>
                 <TableHead>Actions</TableHead>
               </TableRow>
             </TableHeader>
@@ -222,7 +254,7 @@ const EventsManager = () => {
                   <TableCell>{event.title}</TableCell>
                   <TableCell>{event.date}</TableCell>
                   <TableCell>{event.location}</TableCell>
-                  <TableCell>{event.type}</TableCell>
+                  <TableCell>{event.flyer_url ? "Yes" : "No"}</TableCell>
                   <TableCell>
                     <div className="flex gap-2">
                       <Button size="sm" variant="outline" onClick={() => handleEdit(event)}>

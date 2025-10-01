@@ -17,42 +17,63 @@ export type Database = {
       blog_posts: {
         Row: {
           author: string
-          category: string
           content: string
           created_at: string | null
           date: string
           excerpt: string
           id: string
           image_url: string | null
+          pdf_url: string | null
           read_time: string
           title: string
           updated_at: string | null
         }
         Insert: {
           author: string
-          category: string
           content: string
           created_at?: string | null
           date: string
           excerpt: string
           id?: string
           image_url?: string | null
+          pdf_url?: string | null
           read_time: string
           title: string
           updated_at?: string | null
         }
         Update: {
           author?: string
-          category?: string
           content?: string
           created_at?: string | null
           date?: string
           excerpt?: string
           id?: string
           image_url?: string | null
+          pdf_url?: string | null
           read_time?: string
           title?: string
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      community_members: {
+        Row: {
+          created_at: string | null
+          email: string
+          id: string
+          name: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          email: string
+          id?: string
+          name?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          email?: string
+          id?: string
+          name?: string | null
         }
         Relationships: []
       }
@@ -62,13 +83,13 @@ export type Database = {
           created_at: string | null
           date: string
           description: string | null
+          flyer_url: string | null
           id: string
           location: string
           registration_open: boolean | null
           status: string | null
           time: string
           title: string
-          type: string
           updated_at: string | null
         }
         Insert: {
@@ -76,13 +97,13 @@ export type Database = {
           created_at?: string | null
           date: string
           description?: string | null
+          flyer_url?: string | null
           id?: string
           location: string
           registration_open?: boolean | null
           status?: string | null
           time: string
           title: string
-          type: string
           updated_at?: string | null
         }
         Update: {
@@ -90,13 +111,13 @@ export type Database = {
           created_at?: string | null
           date?: string
           description?: string | null
+          flyer_url?: string | null
           id?: string
           location?: string
           registration_open?: boolean | null
           status?: string | null
           time?: string
           title?: string
-          type?: string
           updated_at?: string | null
         }
         Relationships: []
@@ -104,39 +125,60 @@ export type Database = {
       library_documents: {
         Row: {
           author: string | null
+          category: string
           course: string | null
           created_at: string | null
           downloads: number | null
+          file_url: string | null
           id: string
           tags: string[] | null
           title: string
-          type: string
           updated_at: string | null
           year: number | null
         }
         Insert: {
           author?: string | null
+          category?: string
           course?: string | null
           created_at?: string | null
           downloads?: number | null
+          file_url?: string | null
           id?: string
           tags?: string[] | null
           title: string
-          type: string
           updated_at?: string | null
           year?: number | null
         }
         Update: {
           author?: string | null
+          category?: string
           course?: string | null
           created_at?: string | null
           downloads?: number | null
+          file_url?: string | null
           id?: string
           tags?: string[] | null
           title?: string
-          type?: string
           updated_at?: string | null
           year?: number | null
+        }
+        Relationships: []
+      }
+      newsletter_subscribers: {
+        Row: {
+          email: string
+          id: string
+          subscribed_at: string | null
+        }
+        Insert: {
+          email: string
+          id?: string
+          subscribed_at?: string | null
+        }
+        Update: {
+          email?: string
+          id?: string
+          subscribed_at?: string | null
         }
         Relationships: []
       }
@@ -145,34 +187,52 @@ export type Database = {
           created_at: string | null
           date: string
           description: string
-          download_link: string | null
           id: string
           is_urgent: boolean | null
           title: string
-          type: string
           updated_at: string | null
         }
         Insert: {
           created_at?: string | null
           date: string
           description: string
-          download_link?: string | null
           id?: string
           is_urgent?: boolean | null
           title: string
-          type: string
           updated_at?: string | null
         }
         Update: {
           created_at?: string | null
           date?: string
           description?: string
-          download_link?: string | null
           id?: string
           is_urgent?: boolean | null
           title?: string
-          type?: string
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      suggestions: {
+        Row: {
+          created_at: string | null
+          email: string
+          id: string
+          message: string
+          name: string
+        }
+        Insert: {
+          created_at?: string | null
+          email: string
+          id?: string
+          message: string
+          name: string
+        }
+        Update: {
+          created_at?: string | null
+          email?: string
+          id?: string
+          message?: string
+          name?: string
         }
         Relationships: []
       }

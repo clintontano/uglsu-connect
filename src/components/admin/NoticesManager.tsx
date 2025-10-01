@@ -15,9 +15,7 @@ interface Notice {
   title: string;
   description: string;
   date: string;
-  type: string;
   is_urgent: boolean;
-  download_link: string | null;
 }
 
 const NoticesManager = () => {
@@ -27,9 +25,7 @@ const NoticesManager = () => {
     title: "",
     description: "",
     date: "",
-    type: "",
     is_urgent: false,
-    download_link: "",
   });
   const { toast } = useToast();
 
@@ -53,15 +49,10 @@ const NoticesManager = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const submitData = {
-      ...formData,
-      download_link: formData.download_link || null,
-    };
-
     if (editingId) {
       const { error } = await supabase
         .from("notices")
-        .update(submitData)
+        .update(formData)
         .eq("id", editingId);
 
       if (error) {
@@ -72,7 +63,7 @@ const NoticesManager = () => {
         fetchNotices();
       }
     } else {
-      const { error } = await supabase.from("notices").insert([submitData]);
+      const { error } = await supabase.from("notices").insert([formData]);
 
       if (error) {
         toast({ title: "Error", description: error.message, variant: "destructive" });
@@ -90,9 +81,7 @@ const NoticesManager = () => {
       title: notice.title,
       description: notice.description,
       date: notice.date,
-      type: notice.type,
       is_urgent: notice.is_urgent,
-      download_link: notice.download_link || "",
     });
   };
 
@@ -115,9 +104,7 @@ const NoticesManager = () => {
       title: "",
       description: "",
       date: "",
-      type: "",
       is_urgent: false,
-      download_link: "",
     });
   };
 
@@ -129,23 +116,13 @@ const NoticesManager = () => {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>Title</Label>
-                <Input
-                  value={formData.title}
-                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <Label>Type</Label>
-                <Input
-                  value={formData.type}
-                  onChange={(e) => setFormData({ ...formData, type: e.target.value })}
-                  required
-                />
-              </div>
+            <div className="space-y-2">
+              <Label>Title</Label>
+              <Input
+                value={formData.title}
+                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                required
+              />
             </div>
             <div className="space-y-2">
               <Label>Description</Label>
@@ -155,22 +132,14 @@ const NoticesManager = () => {
                 required
               />
             </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>Date</Label>
-                <Input
-                  value={formData.date}
-                  onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <Label>Download Link (optional)</Label>
-                <Input
-                  value={formData.download_link}
-                  onChange={(e) => setFormData({ ...formData, download_link: e.target.value })}
-                />
-              </div>
+            <div className="space-y-2">
+              <Label>Date</Label>
+              <Input
+                type="date"
+                value={formData.date}
+                onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                required
+              />
             </div>
             <div className="flex items-center space-x-2">
               <Checkbox
@@ -206,7 +175,6 @@ const NoticesManager = () => {
               <TableRow>
                 <TableHead>Title</TableHead>
                 <TableHead>Date</TableHead>
-                <TableHead>Type</TableHead>
                 <TableHead>Urgent</TableHead>
                 <TableHead>Actions</TableHead>
               </TableRow>
@@ -216,7 +184,6 @@ const NoticesManager = () => {
                 <TableRow key={notice.id}>
                   <TableCell>{notice.title}</TableCell>
                   <TableCell>{notice.date}</TableCell>
-                  <TableCell>{notice.type}</TableCell>
                   <TableCell>{notice.is_urgent ? "Yes" : "No"}</TableCell>
                   <TableCell>
                     <div className="flex gap-2">
