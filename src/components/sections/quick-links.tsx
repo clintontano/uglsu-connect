@@ -105,7 +105,7 @@ export const QuickLinksSection: React.FC = () => {
           <Card className="bg-gradient-primary text-primary-foreground border-0">
             <CardContent className="p-8 text-center">
               <Bell className="w-12 h-12 mx-auto mb-4 text-accent" />
-              <h3 className="text-2xl font-heading font-bold mb-4">
+              <h3 className="text-2xl font-heading font-bold mb-4 text-foreground">
                 Stay Connected with UGLSU
               </h3>
               <p className="text-foreground mb-6 max-w-2xl mx-auto">

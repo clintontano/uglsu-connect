@@ -2,6 +2,7 @@ import React from 'react';
 import { Navigation } from '@/components/ui/navigation';
 import { HeroSection } from '@/components/sections/hero';
 import { QuickLinksSection } from '@/components/sections/quick-links';
+import { SuggestionBoxSection } from '@/components/sections/suggestion-box';
 import { Footer } from '@/components/ui/footer';
 
 const Index = () => {
@@ -11,6 +12,7 @@ const Index = () => {
       <main>
         <HeroSection />
         <QuickLinksSection />
+        <SuggestionBoxSection />
       </main>
       <Footer />
     </div>
