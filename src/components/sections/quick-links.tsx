@@ -87,11 +87,11 @@ export const QuickLinksSection: React.FC = () => {
 
                 <Button 
                   variant="ghost" 
-                  className="w-full group-hover:bg-primary group-hover:text-primary-foreground" 
+                  className="w-full bg-foreground text-background hover:bg-foreground/90" 
                   asChild
                 >
-                  <Link to={link.href} className="group">
-                    Explore
+                  <Link to={link.href} className="group flex items-center justify-center space-x-2">
+                    <span>Explore</span>
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </Link>
                 </Button>
@@ -108,7 +108,7 @@ export const QuickLinksSection: React.FC = () => {
               <h3 className="text-2xl font-heading font-bold mb-4">
                 Stay Connected with UGLSU
               </h3>
-              <p className="text-primary-foreground/90 mb-6 max-w-2xl mx-auto">
+              <p className="text-foreground mb-6 max-w-2xl mx-auto">
                 Get instant notifications about important announcements, exam schedules, 
                 and exclusive member events directly to your inbox.
               </p>

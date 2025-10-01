@@ -40,13 +40,11 @@ export const Navigation: React.FC<NavigationProps> = ({ className }) => {
           {/* Logo and Brand */}
           <div className="flex items-center space-x-4">
             <Link to="/" className="flex items-center space-x-3">
-              <div className="w-10 h-10 rounded-lg overflow-hidden">
-                <img 
-                  src="/uglsu-logo.png" 
-                  alt="UGLSU Logo" 
-                  className="w-full h-full object-cover"
-                />
-              </div>
+              <img 
+                src="/uglsu-logo.png" 
+                alt="UGLSU Logo" 
+                className="w-10 h-10 rounded-lg object-cover"
+              />
               <div className="hidden sm:block">
                 <h1 className="text-xl font-heading font-bold">UGLSU</h1>
                 <p className="text-xs text-primary-foreground/80">University of Ghana Law Students' Union</p>

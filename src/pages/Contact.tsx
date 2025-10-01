@@ -4,6 +4,7 @@ import { Footer } from '@/components/ui/footer';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Phone, Mail, MapPin, Clock, Users, AlertTriangle, MessageSquare } from 'lucide-react';
+import MapComponent from '@/components/MapComponent';
 
 const Contact = () => {
   const contactMethods = [
@@ -250,15 +251,30 @@ const Contact = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="bg-muted/50 rounded-lg p-6 text-center">
-                  <MapPin className="w-12 h-12 text-primary mx-auto mb-4" />
-                  <p className="text-muted-foreground mb-4">
+                <div className="space-y-6">
+                  <p className="text-muted-foreground">
                     Located within the University of Ghana Law Faculty building. 
                     Take the main stairs to the second floor and look for Room 204.
                   </p>
-                  <Button variant="outline">
-                    Get Directions
-                  </Button>
+                  
+                  <MapComponent 
+                    latitude={5.654227958261955}
+                    longitude={-0.1832381679321753}
+                    zoom={16}
+                  />
+                  
+                  <div className="flex justify-center">
+                    <Button variant="outline" asChild>
+                      <a 
+                        href="https://www.google.com/maps/search/?api=1&query=5.654227958261955,-0.1832381679321753"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <MapPin className="w-4 h-4 mr-2" />
+                        Open in Google Maps
+                      </a>
+                    </Button>
+                  </div>
                 </div>
               </CardContent>
             </Card>

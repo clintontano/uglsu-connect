@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Navigation } from '@/components/ui/navigation';
 import { Footer } from '@/components/ui/footer';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -162,7 +163,9 @@ const Blog = () => {
               Have a legal perspective to share? Join our community of student writers 
               and contribute to the discourse on law and justice in Ghana.
             </p>
-            <Button size="lg">Submit an Article</Button>
+            <Button size="lg" asChild>
+              <Link to="/suggestions">Submit an Article</Link>
+            </Button>
           </section>
         </div>
       </main>

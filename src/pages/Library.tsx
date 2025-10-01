@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { Navigation } from '@/components/ui/navigation';
 import { Footer } from '@/components/ui/footer';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -255,8 +256,8 @@ const Library = () => {
               Have valuable resources to share? Help grow our digital library 
               by contributing materials that benefit the entire law student community.
             </p>
-            <Button variant="hero" size="lg">
-              Submit Resource
+            <Button variant="hero" size="lg" asChild>
+              <Link to="/suggestions">Submit Resource</Link>
             </Button>
           </div>
         </section>

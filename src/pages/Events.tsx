@@ -1,52 +1,74 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import { Navigation } from '@/components/ui/navigation';
 import { Footer } from '@/components/ui/footer';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Calendar, Clock, MapPin, Users, ExternalLink } from 'lucide-react';
+import { Calendar as CalendarIcon, MapPin, Users, Clock, Plus } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { Calendar, dateFnsLocalizer } from 'react-big-calendar';
+import { format, parse, startOfWeek, getDay } from 'date-fns';
+import 'react-big-calendar/lib/css/react-big-calendar.css';
+
+const locales = {
+  'en-US': require('date-fns/locale/en-US')
+};
+
+const localizer = dateFnsLocalizer({
+  format,
+  parse,
+  startOfWeek,
+  getDay,
+  locales,
+});
 
 interface Event {
   id: string;
   title: string;
+  description: string | null;
   date: string;
   time: string;
   location: string;
   type: string;
-  attendees: number;
-  description: string;
-  status: string;
-  registration_open: boolean;
+  attendees: number | null;
+  status: string | null;
+  registration_open: boolean | null;
+}
+
+interface CalendarEvent {
+  title: string;
+  start: Date;
+  end: Date;
+  resource: Event;
 }
 
 const getEventTypeColor = (type: string) => {
-  switch (type) {
-    case 'Competition': return 'bg-accent text-accent-foreground';
-    case 'Workshop': return 'bg-library-primary text-primary-foreground';
-    case 'Meeting': return 'bg-primary text-primary-foreground';
-    case 'Lecture': return 'bg-secondary text-secondary-foreground';
-    case 'Launch': return 'bg-success text-success-foreground';
-    case 'Orientation': return 'bg-warning text-warning-foreground';
-    default: return 'bg-muted text-muted-foreground';
-  }
+  const colors: { [key: string]: string } = {
+    'Academic': 'bg-blue-100 text-blue-800 border-blue-200',
+    'Social': 'bg-purple-100 text-purple-800 border-purple-200',
+    'Workshop': 'bg-green-100 text-green-800 border-green-200',
+    'Seminar': 'bg-amber-100 text-amber-800 border-amber-200',
+    'Meeting': 'bg-gray-100 text-gray-800 border-gray-200',
+  };
+  return colors[type] || 'bg-gray-100 text-gray-800 border-gray-200';
 };
 
 const formatDate = (dateString: string) => {
-  const date = new Date(dateString);
-  return date.toLocaleDateString('en-US', { 
-    weekday: 'long', 
-    year: 'numeric', 
-    month: 'long', 
-    day: 'numeric' 
+  return new Date(dateString).toLocaleDateString('en-US', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
   });
 };
 
 const Events = () => {
   const [upcomingEvents, setUpcomingEvents] = useState<Event[]>([]);
-  const [pastEvents, setPastEvents] = useState<Event[]>([]);
+  const [recentEvents, setRecentEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
+  const [viewMode, setViewMode] = useState<'list' | 'calendar'>('list');
   const { toast } = useToast();
 
   useEffect(() => {
@@ -83,18 +105,22 @@ const Events = () => {
       if (error) throw error;
 
       const now = new Date();
-      const upcoming = data?.filter(event => {
-        const eventDate = new Date(event.date);
-        return eventDate >= now && event.status !== 'completed';
-      }) || [];
+      now.setHours(0, 0, 0, 0);
       
-      const past = data?.filter(event => {
+      const upcoming = data.filter(event => {
         const eventDate = new Date(event.date);
-        return eventDate < now || event.status === 'completed';
-      }) || [];
+        eventDate.setHours(0, 0, 0, 0);
+        return eventDate >= now;
+      });
+      
+      const recent = data.filter(event => {
+        const eventDate = new Date(event.date);
+        eventDate.setHours(0, 0, 0, 0);
+        return eventDate < now;
+      }).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
       setUpcomingEvents(upcoming);
-      setPastEvents(past);
+      setRecentEvents(recent);
     } catch (error: any) {
       toast({
         title: "Error",
@@ -105,6 +131,24 @@ const Events = () => {
       setLoading(false);
     }
   };
+
+  const calendarEvents: CalendarEvent[] = useMemo(() => {
+    return upcomingEvents.map(event => {
+      const eventDate = new Date(event.date);
+      const [hours, minutes] = event.time.split(':').map(Number);
+      const start = new Date(eventDate);
+      start.setHours(hours, minutes);
+      const end = new Date(start);
+      end.setHours(hours + 2, minutes);
+
+      return {
+        title: event.title,
+        start,
+        end,
+        resource: event
+      };
+    });
+  }, [upcomingEvents]);
 
   if (loading) {
     return (
@@ -121,165 +165,183 @@ const Events = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
-      
-      <main>
-        {/* Hero Section */}
-        <section className="bg-gradient-primary py-20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 className="text-display font-heading font-bold mb-6 text-foreground">
-              Events & Calendar
+      <main className="py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Header */}
+          <div className="text-center mb-12">
+            <h1 className="text-4xl font-heading font-bold text-foreground mb-4">
+              Events Calendar
             </h1>
-            <p className="text-xl max-w-3xl mx-auto leading-relaxed text-muted-foreground">
-              Stay connected with the UGLSU community through our diverse range of academic, 
-              professional, and social events designed to enhance your law school experience.
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+              Stay updated with upcoming seminars, workshops, and student gatherings organized by UGLSU.
             </p>
           </div>
-        </section>
 
-        {/* Upcoming Events */}
-        <section className="py-20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-between mb-12">
-              <h2 className="text-display font-heading font-bold">Upcoming Events</h2>
-              <Button variant="outline">
-                <Calendar className="w-4 h-4 mr-2" />
-                View Full Calendar
+          {/* View Toggle */}
+          <div className="flex justify-center mb-8">
+            <div className="inline-flex rounded-lg border border-border p-1">
+              <Button
+                variant={viewMode === 'list' ? 'default' : 'ghost'}
+                size="sm"
+                onClick={() => setViewMode('list')}
+              >
+                List View
+              </Button>
+              <Button
+                variant={viewMode === 'calendar' ? 'default' : 'ghost'}
+                size="sm"
+                onClick={() => setViewMode('calendar')}
+              >
+                <CalendarIcon className="w-4 h-4 mr-2" />
+                Calendar View
               </Button>
             </div>
+          </div>
 
-            <div className="grid gap-6">
-              {upcomingEvents.map((event) => (
-                <Card key={event.id} className="shadow-card border-0 hover:shadow-elegant transition-smooth">
-                  <CardContent className="p-8">
-                    <div className="flex flex-col lg:flex-row lg:items-center justify-between">
-                      <div className="flex-1">
-                        <div className="flex items-center mb-4">
-                          <Badge className={getEventTypeColor(event.type)}>
-                            {event.type}
-                          </Badge>
+          {viewMode === 'calendar' ? (
+            <section className="mb-16">
+              <Card>
+                <CardContent className="p-6">
+                  <div style={{ height: '600px' }}>
+                    <Calendar
+                      localizer={localizer}
+                      events={calendarEvents}
+                      startAccessor="start"
+                      endAccessor="end"
+                      style={{ height: '100%' }}
+                      onSelectEvent={(event) => {
+                        toast({
+                          title: event.resource.title,
+                          description: `${event.resource.location} at ${event.resource.time}`,
+                        });
+                      }}
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+            </section>
+          ) : (
+            <>
+              {/* Upcoming Events */}
+              <section className="mb-16">
+                <h2 className="text-3xl font-heading font-bold mb-8">Upcoming Events</h2>
+                {upcomingEvents.length === 0 ? (
+                  <Card>
+                    <CardContent className="p-8 text-center">
+                      <CalendarIcon className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+                      <p className="text-muted-foreground">No upcoming events scheduled</p>
+                    </CardContent>
+                  </Card>
+                ) : (
+                  <div className="grid gap-6 md:grid-cols-2">
+                    {upcomingEvents.map((event) => (
+                      <Card key={event.id} className="hover:shadow-elegant transition-shadow">
+                        <CardHeader>
+                          <div className="flex items-start justify-between">
+                            <div className="flex-1">
+                              <div className="flex items-center space-x-2 mb-2">
+                                <Badge className={getEventTypeColor(event.type)}>
+                                  {event.type}
+                                </Badge>
+                                {event.registration_open && (
+                                  <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                                    Registration Open
+                                  </Badge>
+                                )}
+                              </div>
+                              <CardTitle className="text-xl">{event.title}</CardTitle>
+                            </div>
+                          </div>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                          {event.description && (
+                            <CardDescription className="text-sm">
+                              {event.description}
+                            </CardDescription>
+                          )}
+                          
+                          <div className="space-y-2">
+                            <div className="flex items-center text-sm text-muted-foreground">
+                              <CalendarIcon className="w-4 h-4 mr-2" />
+                              <span>{formatDate(event.date)}</span>
+                            </div>
+                            <div className="flex items-center text-sm text-muted-foreground">
+                              <Clock className="w-4 h-4 mr-2" />
+                              <span>{event.time}</span>
+                            </div>
+                            <div className="flex items-center text-sm text-muted-foreground">
+                              <MapPin className="w-4 h-4 mr-2" />
+                              <span>{event.location}</span>
+                            </div>
+                            {event.attendees !== null && (
+                              <div className="flex items-center text-sm text-muted-foreground">
+                                <Users className="w-4 h-4 mr-2" />
+                                <span>{event.attendees} attendees expected</span>
+                              </div>
+                            )}
+                          </div>
+
                           {event.registration_open && (
-                            <Badge variant="outline" className="ml-2 text-success border-success">
-                              Registration Open
+                            <Button className="w-full">Register Now</Button>
+                          )}
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                )}
+              </section>
+
+              {/* Recent Events */}
+              {recentEvents.length > 0 && (
+                <section>
+                  <h2 className="text-3xl font-heading font-bold mb-8">Recent Events</h2>
+                  <div className="grid gap-6 md:grid-cols-2">
+                    {recentEvents.slice(0, 6).map((event) => (
+                      <Card key={event.id} className="opacity-80">
+                        <CardHeader>
+                          <div className="flex items-center space-x-2 mb-2">
+                            <Badge className={getEventTypeColor(event.type)} variant="outline">
+                              {event.type}
                             </Badge>
-                          )}
-                        </div>
-                        
-                        <h3 className="text-2xl font-heading font-semibold mb-3">
-                          {event.title}
-                        </h3>
-                        
-                        <p className="text-muted-foreground mb-4 leading-relaxed">
-                          {event.description}
-                        </p>
-                        
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-                          <div className="flex items-center text-muted-foreground">
-                            <Calendar className="w-4 h-4 mr-2 text-accent" />
-                            {formatDate(event.date)}
+                            <Badge variant="secondary">Completed</Badge>
                           </div>
-                          <div className="flex items-center text-muted-foreground">
-                            <Clock className="w-4 h-4 mr-2 text-accent" />
-                            {event.time}
+                          <CardTitle className="text-lg">{event.title}</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="space-y-2 text-sm text-muted-foreground">
+                            <div className="flex items-center">
+                              <CalendarIcon className="w-4 h-4 mr-2" />
+                              <span>{formatDate(event.date)}</span>
+                            </div>
+                            <div className="flex items-center">
+                              <MapPin className="w-4 h-4 mr-2" />
+                              <span>{event.location}</span>
+                            </div>
                           </div>
-                          <div className="flex items-center text-muted-foreground">
-                            <MapPin className="w-4 h-4 mr-2 text-accent" />
-                            {event.location}
-                          </div>
-                        </div>
-                      </div>
-                      
-                      <div className="lg:ml-8 mt-6 lg:mt-0 flex flex-col items-end">
-                        <div className="flex items-center text-muted-foreground mb-4">
-                          <Users className="w-4 h-4 mr-2" />
-                          <span>{event.attendees} registered</span>
-                        </div>
-                        
-                        <div className="flex space-x-3">
-                          <Button variant="outline" size="sm">
-                            View Details
-                          </Button>
-                          {event.registration_open ? (
-                            <Button variant="hero" size="sm">
-                              Register Now
-                            </Button>
-                          ) : (
-                            <Button variant="secondary" size="sm" disabled>
-                              Registration Closed
-                            </Button>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </section>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </section>
+              )}
+            </>
+          )}
 
-        {/* Past Events */}
-        <section className="py-20 bg-muted/30">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-display font-heading font-bold mb-12">Recent Events</h2>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {pastEvents.map((event) => (
-                <Card key={event.id} className="shadow-card border-0">
-                  <CardHeader>
-                    <div className="flex items-center justify-between mb-2">
-                      <Badge className={getEventTypeColor(event.type)}>
-                        {event.type}
-                      </Badge>
-                      <Badge variant="outline">Completed</Badge>
-                    </div>
-                    <CardTitle className="font-heading text-xl">
-                      {event.title}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-muted-foreground mb-4">
-                      {event.description}
-                    </p>
-                    
-                    <div className="space-y-2 text-sm text-muted-foreground mb-4">
-                      <div className="flex items-center">
-                        <Calendar className="w-4 h-4 mr-2 text-accent" />
-                        {formatDate(event.date)}
-                      </div>
-                      <div className="flex items-center">
-                        <Users className="w-4 h-4 mr-2 text-accent" />
-                        {event.attendees} attendees
-                      </div>
-                    </div>
-                    
-                    <Button variant="ghost" size="sm" className="group">
-                      View Summary
-                      <ExternalLink className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Event Submission CTA */}
-        <section className="py-20">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 className="text-display font-heading font-bold mb-6">
+          {/* Call to Action */}
+          <section className="mt-16 text-center bg-muted/50 rounded-lg p-8">
+            <Plus className="w-12 h-12 mx-auto mb-4 text-primary" />
+            <h2 className="text-2xl font-heading font-semibold mb-4">
               Have an Event Idea?
             </h2>
-            <p className="text-xl text-muted-foreground mb-8">
-              UGLSU welcomes event proposals from students. Share your ideas for workshops, 
-              seminars, or community activities that can benefit our law student community.
+            <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
+              Interested in organizing an event with UGLSU?
             </p>
-            <Button variant="hero" size="lg">
-              Submit Event Proposal
+            <Button variant="outline" size="lg" asChild>
+              <Link to="/suggestions">Submit Event Proposal</Link>
             </Button>
-          </div>
-        </section>
+          </section>
+        </div>
       </main>
-
       <Footer />
     </div>
   );
