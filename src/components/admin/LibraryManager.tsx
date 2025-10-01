@@ -11,12 +11,13 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 interface LibraryDocument {
   id: string;
   title: string;
-  type: string;
+  category: string;
   author: string | null;
   year: number | null;
   course: string | null;
   downloads: number;
   tags: string[];
+  file_url: string | null;
 }
 
 const LibraryManager = () => {
@@ -24,12 +25,14 @@ const LibraryManager = () => {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     title: "",
-    type: "",
+    category: "Books",
     author: "",
     year: "",
     course: "",
     tags: "",
+    file_url: "",
   });
+  const [pdfFile, setPdfFile] = useState<File | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -52,13 +55,38 @@ const LibraryManager = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    let fileUrl = formData.file_url;
+
+    // Upload PDF if provided
+    if (pdfFile) {
+      const fileExt = pdfFile.name.split('.').pop();
+      const fileName = `${Math.random()}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('library-documents')
+        .upload(filePath, pdfFile);
+
+      if (uploadError) {
+        toast({ title: "Error", description: uploadError.message, variant: "destructive" });
+        return;
+      }
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('library-documents')
+        .getPublicUrl(filePath);
+
+      fileUrl = publicUrl;
+    }
+
     const submitData = {
       title: formData.title,
-      type: formData.type,
+      category: formData.category,
       author: formData.author || null,
       year: formData.year ? parseInt(formData.year) : null,
       course: formData.course || null,
       tags: formData.tags ? formData.tags.split(",").map((t) => t.trim()) : [],
+      file_url: fileUrl || null,
     };
 
     if (editingId) {
@@ -91,12 +119,14 @@ const LibraryManager = () => {
     setEditingId(doc.id);
     setFormData({
       title: doc.title,
-      type: doc.type,
+      category: doc.category,
       author: doc.author || "",
       year: doc.year?.toString() || "",
       course: doc.course || "",
       tags: doc.tags.join(", "),
+      file_url: doc.file_url || "",
     });
+    setPdfFile(null);
   };
 
   const handleDelete = async (id: string) => {
@@ -116,12 +146,14 @@ const LibraryManager = () => {
     setEditingId(null);
     setFormData({
       title: "",
-      type: "",
+      category: "Books",
       author: "",
       year: "",
       course: "",
       tags: "",
+      file_url: "",
     });
+    setPdfFile(null);
   };
 
   return (
@@ -142,13 +174,33 @@ const LibraryManager = () => {
                 />
               </div>
               <div className="space-y-2">
-                <Label>Type</Label>
-                <Input
-                  value={formData.type}
-                  onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+                <Label>Category</Label>
+                <select
+                  value={formData.category}
+                  onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                  className="w-full h-10 px-3 rounded-md border border-input bg-background"
                   required
-                />
+                >
+                  <option value="Books">Books</option>
+                  <option value="Study Guides">Study Guides</option>
+                  <option value="Lecture Slides">Lecture Slides</option>
+                  <option value="Cases">Cases</option>
+                  <option value="Past Questions">Past Questions</option>
+                  <option value="Articles">Articles</option>
+                </select>
               </div>
+            </div>
+            <div className="space-y-2">
+              <Label>PDF Document (required, max 20MB)</Label>
+              <Input
+                type="file"
+                accept="application/pdf"
+                onChange={(e) => setPdfFile(e.target.files?.[0] || null)}
+                required={!editingId && !formData.file_url}
+              />
+              {formData.file_url && (
+                <p className="text-sm text-muted-foreground">Current: {formData.file_url}</p>
+              )}
             </div>
             <div className="grid grid-cols-3 gap-4">
               <div className="space-y-2">
@@ -205,8 +257,8 @@ const LibraryManager = () => {
             <TableHeader>
               <TableRow>
                 <TableHead>Title</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Author</TableHead>
+                <TableHead>Category</TableHead>
+                <TableHead>Course</TableHead>
                 <TableHead>Year</TableHead>
                 <TableHead>Actions</TableHead>
               </TableRow>
@@ -215,8 +267,8 @@ const LibraryManager = () => {
               {documents.map((doc) => (
                 <TableRow key={doc.id}>
                   <TableCell>{doc.title}</TableCell>
-                  <TableCell>{doc.type}</TableCell>
-                  <TableCell>{doc.author}</TableCell>
+                  <TableCell>{doc.category}</TableCell>
+                  <TableCell>{doc.course || "—"}</TableCell>
                   <TableCell>{doc.year}</TableCell>
                   <TableCell>
                     <div className="flex gap-2">

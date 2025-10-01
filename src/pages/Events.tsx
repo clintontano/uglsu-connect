@@ -32,7 +32,7 @@ interface Event {
   date: string;
   time: string;
   location: string;
-  type: string;
+  flyer_url: string | null;
   attendees: number | null;
   status: string | null;
   registration_open: boolean | null;
@@ -241,9 +241,6 @@ const Events = () => {
                           <div className="flex items-start justify-between">
                             <div className="flex-1">
                               <div className="flex items-center space-x-2 mb-2">
-                                <Badge className={getEventTypeColor(event.type)}>
-                                  {event.type}
-                                </Badge>
                                 {event.registration_open && (
                                   <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
                                     Registration Open
@@ -301,9 +298,6 @@ const Events = () => {
                       <Card key={event.id} className="opacity-80">
                         <CardHeader>
                           <div className="flex items-center space-x-2 mb-2">
-                            <Badge className={getEventTypeColor(event.type)} variant="outline">
-                              {event.type}
-                            </Badge>
                             <Badge variant="secondary">Completed</Badge>
                           </div>
                           <CardTitle className="text-lg">{event.title}</CardTitle>

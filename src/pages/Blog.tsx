@@ -15,10 +15,10 @@ interface BlogPost {
   excerpt: string;
   author: string;
   date: string;
-  category: string;
   read_time: string;
   content: string;
   image_url: string | null;
+  pdf_url: string | null;
 }
 
 const Blog = () => {
@@ -71,7 +71,7 @@ const Blog = () => {
     }
   };
 
-  const categories = Array.from(new Set(featuredPosts.map(post => post.category)));
+  // Categories removed from schema
 
   if (loading) {
     return (
@@ -109,7 +109,6 @@ const Blog = () => {
                 <Card key={post.id} className="group hover:shadow-elegant transition-shadow">
                   <CardHeader>
                     <div className="flex items-center justify-between mb-2">
-                      <Badge variant="secondary">{post.category}</Badge>
                       <span className="text-sm text-muted-foreground">{post.read_time}</span>
                     </div>
                     <CardTitle className="group-hover:text-primary transition-colors">
@@ -135,24 +134,6 @@ const Blog = () => {
               ))}
             </div>
           </section>
-
-          {/* Categories */}
-          {categories.length > 0 && (
-            <section className="mb-16">
-              <h2 className="text-2xl font-heading font-semibold mb-8">Browse by Category</h2>
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                {categories.map((category) => (
-                  <Button
-                    key={category}
-                    variant="outline"
-                    className="h-auto p-4 justify-start"
-                  >
-                    {category}
-                  </Button>
-                ))}
-              </div>
-            </section>
-          )}
 
           {/* Call to Action */}
           <section className="text-center bg-muted/50 rounded-lg p-8">

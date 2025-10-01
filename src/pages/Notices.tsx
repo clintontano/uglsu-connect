@@ -13,9 +13,7 @@ interface Notice {
   title: string;
   description: string;
   date: string;
-  type: string;
   is_urgent: boolean;
-  download_link: string | null;
 }
 
 const Notices = () => {
@@ -73,31 +71,7 @@ const Notices = () => {
     }
   };
 
-  const getNoticeIcon = (type: string) => {
-    switch (type) {
-      case 'urgent':
-        return <AlertTriangle className="w-5 h-5 text-destructive" />;
-      case 'academic':
-        return <Calendar className="w-5 h-5 text-primary" />;
-      case 'event':
-        return <Pin className="w-5 h-5 text-accent" />;
-      default:
-        return <Pin className="w-5 h-5 text-muted-foreground" />;
-    }
-  };
-
-  const getNoticeVariant = (type: string) => {
-    switch (type) {
-      case 'urgent':
-        return 'destructive';
-      case 'academic':
-        return 'default';
-      case 'event':
-        return 'secondary';
-      default:
-        return 'outline';
-    }
-  };
+  // Notice type functions removed since type field was removed from schema
 
   if (loading) {
     return (
@@ -157,18 +131,12 @@ const Notices = () => {
                 <Card key={notice.id} className="hover:shadow-md transition-shadow">
                   <CardHeader>
                     <div className="flex items-start justify-between">
-                      <div className="flex items-start space-x-3">
-                        {getNoticeIcon(notice.type)}
-                        <div className="flex-1">
-                          <CardTitle className="text-lg">{notice.title}</CardTitle>
-                          <CardDescription className="mt-2">
-                            {notice.description}
-                          </CardDescription>
-                        </div>
+                      <div className="flex-1">
+                        <CardTitle className="text-lg">{notice.title}</CardTitle>
+                        <CardDescription className="mt-2">
+                          {notice.description}
+                        </CardDescription>
                       </div>
-                      <Badge variant={getNoticeVariant(notice.type) as any}>
-                        {notice.type}
-                      </Badge>
                     </div>
                   </CardHeader>
                   <CardContent>
@@ -177,17 +145,6 @@ const Notices = () => {
                         <Calendar className="w-4 h-4" />
                         <span>{new Date(notice.date).toLocaleDateString()}</span>
                       </div>
-                      {notice.download_link && (
-                        <a 
-                          href={notice.download_link} 
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          className="flex items-center space-x-1 text-sm text-primary hover:underline"
-                        >
-                          <Download className="w-4 h-4" />
-                          <span>Download</span>
-                        </a>
-                      )}
                     </div>
                   </CardContent>
                 </Card>

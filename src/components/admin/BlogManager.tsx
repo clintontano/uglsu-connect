@@ -16,9 +16,9 @@ interface BlogPost {
   content: string;
   author: string;
   date: string;
-  category: string;
   read_time: string;
   image_url: string | null;
+  pdf_url: string | null;
 }
 
 const BlogManager = () => {
@@ -30,10 +30,11 @@ const BlogManager = () => {
     content: "",
     author: "",
     date: "",
-    category: "",
     read_time: "",
     image_url: "",
+    pdf_url: "",
   });
+  const [pdfFile, setPdfFile] = useState<File | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -56,9 +57,34 @@ const BlogManager = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    let pdfUrl = formData.pdf_url;
+
+    // Upload PDF if provided
+    if (pdfFile) {
+      const fileExt = pdfFile.name.split('.').pop();
+      const fileName = `${Math.random()}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('blog-pdfs')
+        .upload(filePath, pdfFile);
+
+      if (uploadError) {
+        toast({ title: "Error", description: uploadError.message, variant: "destructive" });
+        return;
+      }
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('blog-pdfs')
+        .getPublicUrl(filePath);
+
+      pdfUrl = publicUrl;
+    }
+
     const submitData = {
       ...formData,
       image_url: formData.image_url || null,
+      pdf_url: pdfUrl || null,
     };
 
     if (editingId) {
@@ -95,10 +121,11 @@ const BlogManager = () => {
       content: post.content,
       author: post.author,
       date: post.date,
-      category: post.category,
       read_time: post.read_time,
       image_url: post.image_url || "",
+      pdf_url: post.pdf_url || "",
     });
+    setPdfFile(null);
   };
 
   const handleDelete = async (id: string) => {
@@ -122,10 +149,11 @@ const BlogManager = () => {
       content: "",
       author: "",
       date: "",
-      category: "",
       read_time: "",
       image_url: "",
+      pdf_url: "",
     });
+    setPdfFile(null);
   };
 
   return (
@@ -179,31 +207,34 @@ const BlogManager = () => {
                 />
               </div>
             </div>
+            <div className="space-y-2">
+              <Label>Read Time</Label>
+              <Input
+                value={formData.read_time}
+                onChange={(e) => setFormData({ ...formData, read_time: e.target.value })}
+                required
+                placeholder="e.g., 5 min read"
+              />
+            </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label>Category</Label>
+                <Label>Image URL (optional)</Label>
                 <Input
-                  value={formData.category}
-                  onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                  required
+                  value={formData.image_url}
+                  onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
                 />
               </div>
               <div className="space-y-2">
-                <Label>Read Time</Label>
+                <Label>PDF Document (optional, max 20MB)</Label>
                 <Input
-                  value={formData.read_time}
-                  onChange={(e) => setFormData({ ...formData, read_time: e.target.value })}
-                  required
-                  placeholder="e.g., 5 min read"
+                  type="file"
+                  accept="application/pdf"
+                  onChange={(e) => setPdfFile(e.target.files?.[0] || null)}
                 />
+                {formData.pdf_url && (
+                  <p className="text-sm text-muted-foreground">Current: {formData.pdf_url}</p>
+                )}
               </div>
-            </div>
-            <div className="space-y-2">
-              <Label>Image URL (optional)</Label>
-              <Input
-                value={formData.image_url}
-                onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
-              />
             </div>
             <div className="flex gap-2">
               <Button type="submit">
@@ -230,7 +261,7 @@ const BlogManager = () => {
                 <TableHead>Title</TableHead>
                 <TableHead>Author</TableHead>
                 <TableHead>Date</TableHead>
-                <TableHead>Category</TableHead>
+                <TableHead>Has PDF</TableHead>
                 <TableHead>Actions</TableHead>
               </TableRow>
             </TableHeader>
@@ -240,7 +271,7 @@ const BlogManager = () => {
                   <TableCell>{post.title}</TableCell>
                   <TableCell>{post.author}</TableCell>
                   <TableCell>{post.date}</TableCell>
-                  <TableCell>{post.category}</TableCell>
+                  <TableCell>{post.pdf_url ? "Yes" : "No"}</TableCell>
                   <TableCell>
                     <div className="flex gap-2">
                       <Button size="sm" variant="outline" onClick={() => handleEdit(post)}>

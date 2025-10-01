@@ -23,12 +23,13 @@ import { useToast } from '@/hooks/use-toast';
 interface LibraryDocument {
   id: string;
   title: string;
-  type: string;
+  category: string;
   author: string | null;
   year: number | null;
   course: string | null;
   downloads: number;
   tags: string[];
+  file_url: string | null;
 }
 
 const resourceTypes = [
@@ -95,13 +96,13 @@ const Library = () => {
     const matchesSearch = item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          item.author?.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          item.course?.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesType = selectedType === 'All' || item.type === selectedType;
+    const matchesType = selectedType === 'All' || item.category === selectedType;
     return matchesSearch && matchesType;
   });
 
   const getCountForType = (type: string) => {
     if (type === 'All') return libraryItems.length;
-    return libraryItems.filter(item => item.type === type).length;
+    return libraryItems.filter(item => item.category === type).length;
   };
 
   if (loading) {
@@ -185,7 +186,7 @@ const Library = () => {
                 <Card key={item.id} className="shadow-card border-0 hover:shadow-elegant transition-smooth">
                   <CardHeader>
                     <div className="flex items-start justify-between mb-2">
-                      <Badge variant="secondary">{item.type}</Badge>
+                      <Badge variant="secondary">{item.category}</Badge>
                       <span className="text-sm text-muted-foreground">{item.year}</span>
                     </div>
                     <CardTitle className="font-heading text-lg leading-tight">
