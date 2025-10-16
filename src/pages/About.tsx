@@ -155,6 +155,40 @@ const About = () => {
           </div>
         </section>
 
+        {/* LSU Patron Section */}
+        <section className="py-20 bg-muted/30">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <h2 className="text-display font-heading font-bold mb-4">
+                LSU Patron
+              </h2>
+            </div>
+            
+            <Card className="shadow-card border-0 max-w-4xl mx-auto">
+              <CardContent className="p-8 md:p-12">
+                <div className="flex flex-col md:flex-row gap-8 items-center">
+                  <div className="w-48 h-48 bg-muted rounded-full flex items-center justify-center flex-shrink-0">
+                    <Users className="w-24 h-24 text-muted-foreground" />
+                  </div>
+                  
+                  <div className="flex-1 text-center md:text-left">
+                    <h3 className="text-2xl font-heading font-bold mb-2">Dr. Samuel Obeng Manteaw</h3>
+                    <Badge variant="secondary" className="mb-4">LSU Patron</Badge>
+                    
+                    <p className="text-muted-foreground leading-relaxed">
+                      Dr. Samuel Obeng Manteaw is a lawyer and Senior Lecturer at the University of Ghana School of Law. 
+                      He holds a PhD in Law from the University of Ghana. He also holds two LLM degrees; an LLM Degree in 
+                      Intellectual Property from the George Washington University Law School and an LL.M in Transnational 
+                      Business Practice from the Pacific McGeorge School of Law. He has extensive teaching, consultancy and 
+                      research experience, and has published widely across various subjects.
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+
         {/* Committees Section */}
         <section className="py-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

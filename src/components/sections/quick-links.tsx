@@ -8,7 +8,10 @@ import {
   Calendar, 
   UserPlus, 
   Bell, 
-  ArrowRight 
+  ArrowRight,
+  Scale,
+  Briefcase,
+  Users
 } from 'lucide-react';
 
 const quickLinks = [
@@ -43,6 +46,30 @@ const quickLinks = [
     href: '/notices',
     color: 'warning',
     features: ['Exam Schedules', 'Meeting Minutes', 'Important Updates', 'Deadlines']
+  },
+  {
+    title: 'LSU Judicial Decisions',
+    description: 'View past decisions made by the LSU Judicial Board',
+    icon: Scale,
+    href: '/judicial-decisions',
+    color: 'primary',
+    features: ['Board Decisions', 'Case Files', 'Legal Precedents', 'Archives']
+  },
+  {
+    title: 'Student Services',
+    description: 'Access support services and resources for law students',
+    icon: Users,
+    href: '/services',
+    color: 'accent',
+    features: ['Support Services', 'Resources', 'Assistance', 'Guidance']
+  },
+  {
+    title: 'Law Firms',
+    description: 'Explore law firms under the LSU for practical experience',
+    icon: Briefcase,
+    href: '/law-firms',
+    color: 'library-primary',
+    features: ['Firm Profiles', 'Opportunities', 'Internships', 'Career Paths']
   },
 ];
 

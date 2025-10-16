@@ -2,6 +2,12 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { 
   Home, 
   Users, 
@@ -12,7 +18,11 @@ import {
   UserPlus, 
   Phone,
   Menu,
-  X
+  X,
+  ChevronDown,
+  Scale,
+  Briefcase,
+  MessageSquare
 } from 'lucide-react';
 
 const navItems = [
@@ -72,6 +82,45 @@ export const Navigation: React.FC<NavigationProps> = ({ className }) => {
                 </Link>
               );
             })}
+            
+            {/* More Dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="px-3 py-2 rounded-md text-sm font-medium text-primary-foreground/80 hover:bg-primary-foreground/10 hover:text-primary-foreground transition-smooth flex items-center space-x-1"
+                >
+                  <span>More</span>
+                  <ChevronDown className="w-4 h-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56 bg-card z-50">
+                <DropdownMenuItem asChild>
+                  <Link to="/law-firms" className="flex items-center cursor-pointer">
+                    <Briefcase className="w-4 h-4 mr-2" />
+                    Law Firms
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/judicial-decisions" className="flex items-center cursor-pointer">
+                    <Scale className="w-4 h-4 mr-2" />
+                    LSU Judicial Decisions
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/services" className="flex items-center cursor-pointer">
+                    <Users className="w-4 h-4 mr-2" />
+                    Student Services
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/suggestions" className="flex items-center cursor-pointer">
+                    <MessageSquare className="w-4 h-4 mr-2" />
+                    Suggestion Box
+                  </Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
 
 
@@ -111,6 +160,42 @@ export const Navigation: React.FC<NavigationProps> = ({ className }) => {
                   </Link>
                 );
               })}
+              
+              {/* More Links in Mobile */}
+              <div className="border-t border-primary-foreground/10 mt-2 pt-2">
+                <Link
+                  to="/law-firms"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block px-3 py-2 rounded-md text-base font-medium text-primary-foreground/80 hover:bg-primary-foreground/10 hover:text-primary-foreground transition-smooth flex items-center space-x-2"
+                >
+                  <Briefcase className="w-5 h-5" />
+                  <span>Law Firms</span>
+                </Link>
+                <Link
+                  to="/judicial-decisions"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block px-3 py-2 rounded-md text-base font-medium text-primary-foreground/80 hover:bg-primary-foreground/10 hover:text-primary-foreground transition-smooth flex items-center space-x-2"
+                >
+                  <Scale className="w-5 h-5" />
+                  <span>LSU Judicial Decisions</span>
+                </Link>
+                <Link
+                  to="/services"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block px-3 py-2 rounded-md text-base font-medium text-primary-foreground/80 hover:bg-primary-foreground/10 hover:text-primary-foreground transition-smooth flex items-center space-x-2"
+                >
+                  <Users className="w-5 h-5" />
+                  <span>Student Services</span>
+                </Link>
+                <Link
+                  to="/suggestions"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block px-3 py-2 rounded-md text-base font-medium text-primary-foreground/80 hover:bg-primary-foreground/10 hover:text-primary-foreground transition-smooth flex items-center space-x-2"
+                >
+                  <MessageSquare className="w-5 h-5" />
+                  <span>Suggestion Box</span>
+                </Link>
+              </div>
             </div>
           </div>
         )}
