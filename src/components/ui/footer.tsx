@@ -194,7 +194,7 @@ export const Footer: React.FC = () => {
         {/* Bottom Footer */}
         <div className="flex flex-col md:flex-row justify-between items-center">
           <div className="flex items-center space-x-2 mb-4 md:mb-0">
-            <img src="/51st Admin logo.png" alt="51st Admin logo" className="h-12 w-auto" />
+            <img src="/51st-admin-logo.png" alt="51st Admin logo" className="h-12 w-auto" />
             <span className="text-sm text-primary-foreground/90 font-medium">51st UGLSU Administration</span>
           </div>
           <div className="text-sm text-primary-foreground/80 mb-4 md:mb-0">
