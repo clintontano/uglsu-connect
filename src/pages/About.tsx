@@ -30,32 +30,40 @@ import { ContactExcerptSection } from '@/components/sections/contact-excerpt';
 
 const executiveMembers = [
   {
-    name: 'Sarah Mensah',
+    name: 'NAHUM AGYEPONG',
     position: 'President',
-    year: 'Final Year',
-    email: 'president@uglsu.org',
-    image: '/api/placeholder/200/200'
+    email: 'thenahumagyepong@gmail.com',
+    linkedin: 'https://linkedin.com/in/nahum-agyepong-ab45a7278',
+    image: '/Nahum Agyepong.png',
   },
   {
-    name: 'Kwame Asante',
+    name: 'KINGSLEY OTU-AMPONSAH',
     position: 'Vice President',
-    year: 'Level 300',
-    email: 'vp@uglsu.org',
-    image: '/api/placeholder/200/200'
+    email: 'kingotuamp@gmail.com',
+    linkedin: 'https://linkedin.com/in/kingsley-otu-amponsah-204796218',
+    image: '/Kingsley Otu-Amponsah.png',
+    nameClass: 'whitespace-nowrap', // option for custom utility class
   },
   {
-    name: 'Akosua Owusu',
+    name: 'HUSNA AYARIGA',
     position: 'General Secretary',
-    year: 'Level 400',
-    email: 'secretary@uglsu.org',
-    image: '/api/placeholder/200/200'
+    email: 'ayarigahusna@gmail.com',
+    linkedin: 'https://linkedin.com/in/husna-ayariga-56a854212',
+    image: '/Husna Ayariga.jpeg',
   },
   {
-    name: 'Kofi Boateng',
+    name: 'GILBERT TINADAGA S.',
+    position: 'General Secretary',
+    email: 'tinadagasongze@gmail.com',
+    linkedin: '',
+    image: '/Gilbert Tinadag.jpg',
+  },
+  {
+    name: 'SHIELA ZIEM',
     position: 'Treasurer',
-    year: 'Level 300',
-    email: 'treasurer@uglsu.org',
-    image: '/api/placeholder/200/200'
+    email: 'ziemshiela99@gmail.com',
+    linkedin: 'https://linkedin.com/in/sheila-ziem-76741b354',
+    image: '/Shiela Ziem.jpeg',
   },
 ];
 
@@ -127,8 +135,12 @@ const About = () => {
             <Card className="shadow-card border-0 max-w-4xl mx-auto">
               <CardContent className="p-8 md:p-12">
                 <div className="flex flex-col md:flex-row gap-8 items-center">
-                  <div className="w-48 h-48 bg-muted rounded-full flex items-center justify-center flex-shrink-0">
-                    <Users className="w-24 h-24 text-muted-foreground" />
+                  <div className="w-40 h-40 bg-muted rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden mx-auto mb-6">
+                    <img
+                      src="/Dr. Samuel Obeng Manteaw.jpg"
+                      alt="Dr. Samuel Obeng Manteaw"
+                      className="w-full h-full object-cover"
+                    />
                   </div>
                   
                   <div className="flex-1 text-center md:text-left">
@@ -165,23 +177,35 @@ const About = () => {
               {executiveMembers.map((member) => (
                 <Card key={member.name} className="shadow-card border-0 text-center">
                   <CardContent className="p-6">
-                    <div className="w-24 h-24 bg-muted rounded-full mx-auto mb-4 flex items-center justify-center">
-                      <Users className="w-12 h-12 text-muted-foreground" />
+                    <div className="w-32 h-32 bg-muted rounded-full mx-auto mb-4 flex items-center justify-center overflow-hidden">
+                      {member.image ? (
+                        <img
+                          src={member.image}
+                          alt={member.name}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <Users className="w-16 h-16 text-muted-foreground" />
+                      )}
                     </div>
-                    <h3 className="font-heading font-semibold text-lg mb-1">{member.name}</h3>
+                    <h3 className={`font-heading font-semibold text-lg mb-1 ${member.nameClass || ''}`}>{member.name}</h3>
                     <Badge variant="secondary" className="mb-2">{member.position}</Badge>
-                    <p className="text-sm text-muted-foreground mb-4">{member.year}</p>
+                    <div className="flex flex-col justify-center items-center mb-4">
+                      <span className="text-xs text-muted-foreground">{member.email}</span>
+                    </div>
                     <div className="flex justify-center space-x-2">
                       <Button variant="ghost" size="sm" asChild>
                         <a href={`mailto:${member.email}`}>
                           <Mail className="w-4 h-4" />
                         </a>
                       </Button>
-                      <Button variant="ghost" size="sm" asChild>
-                        <a href="#" aria-label="LinkedIn Profile">
-                          <Linkedin className="w-4 h-4" />
-                        </a>
-                      </Button>
+                      {member.linkedin && (
+                        <Button variant="ghost" size="sm" asChild>
+                          <a href={member.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn Profile">
+                            <Linkedin className="w-4 h-4" />
+                          </a>
+                        </Button>
+                      )}
                     </div>
                   </CardContent>
                 </Card>

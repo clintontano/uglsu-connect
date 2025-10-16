@@ -7,11 +7,9 @@ import {
   Mail, 
   Phone, 
   MapPin, 
-  Facebook, 
-  Twitter, 
   Instagram, 
-  Linkedin,
-  ExternalLink 
+  Linkedin, 
+  Twitter,
 } from 'lucide-react';
 
 const footerSections = [
@@ -49,10 +47,35 @@ const footerSections = [
 ];
 
 const socialLinks = [
-  { name: 'Facebook', icon: Facebook, href: '#' },
-  { name: 'Twitter', icon: Twitter, href: '#' },
-  { name: 'Instagram', icon: Instagram, href: '#' },
-  { name: 'LinkedIn', icon: Linkedin, href: '#' },
+  {
+    name: 'Snapchat',
+    icon: (props: any) => (
+      <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M8 13c-.56 0-1.06.46-1.37.83-.61.8-2.72.86-2.82.86-.19.01-.34.17-.32.36.01.14.12.26.26.3 1.13.24 1.72.61 1.88.75.31.25.39.74.41.85.02.13.13.22.25.22H8m8-4c.56 0 1.06.46 1.37.83.61.8 2.72.86 2.82.86.19.01.34.17.32.36-.01.14-.12.26-.26.3-1.13.24-1.72.61-1.88.75-.31.25-.39.74-.41.85-.02.13-.13.22-.25.22H16M8 17h8m-4-4.5L14 13m-4 0 2-.5V15m0-11c-4.17 0-7.37 4.17-7.5 7.5a10.95 10.95 0 0 0 4.66 9.06A8.54 8.54 0 0 0 12 21.5a8.54 8.54 0 0 0 3.84-1.44A10.95 10.95 0 0 0 19.5 11.5C19.37 8.17 16.17 4 12 4Zm-2.5 8.5 .5-.5 2 .5 2-.5.5.5" /></svg>
+    ),
+    href: 'https://www.snapchat.com/add/ug_lsu',
+  },
+  {
+    name: 'Instagram',
+    icon: Instagram,
+    href: 'https://instagram.com/ug_lsu',
+  },
+  {
+    name: 'TikTok',
+    icon: (props: any) => (
+      <svg {...props} viewBox="0 0 256 256" fill="currentColor"><path d="M180 45.7V136a53.33 53.33 0 1 1-53.3-53.3 8 8 0 0 1 0 16A37.3 37.3 0 1 0 164 136V32a8 8 0 0 1 16 0c0 13.9 9.1 25.5 20 25.5a8 8 0 0 1 0 16c-14.2 0-27.7-10.2-32-27.8ZM192 16a8 8 0 0 0-8 8v120a45.3 45.3 0 1 1-27.6-41.2 8 8 0 0 0 7.2-14.4A61.34 61.34 0 1 0 200 144V24a8 8 0 0 0-8-8Z"/></svg>
+    ),
+    href: 'https://www.tiktok.com/@uglsu',
+  },
+  {
+    name: 'X / Twitter',
+    icon: Twitter,
+    href: 'https://twitter.com/ug_lsu',
+  },
+  {
+    name: 'LinkedIn',
+    icon: Linkedin,
+    href: 'https://linkedin.com/in/uglsu',
+  },
 ];
 
 export const Footer: React.FC = () => {
@@ -88,11 +111,11 @@ export const Footer: React.FC = () => {
             <div className="space-y-3">
               <div className="flex items-center space-x-3">
                 <Mail className="w-4 h-4 text-accent" />
-                <span className="text-sm">info@uglsu.org</span>
+                <span className="text-sm">lawstudents.ug@gmail.com</span>
               </div>
               <div className="flex items-center space-x-3">
                 <Phone className="w-4 h-4 text-accent" />
-                <span className="text-sm">+233 XX XXX XXXX</span>
+                <span className="text-sm">+233 55 154 4080</span>
               </div>
               <div className="flex items-center space-x-3">
                 <MapPin className="w-4 h-4 text-accent" />
@@ -114,7 +137,20 @@ export const Footer: React.FC = () => {
                     >
                       {link.name}
                       {link.href.startsWith('http') && (
-                        <ExternalLink className="w-3 h-3 ml-1 opacity-0 group-hover:opacity-100 transition-opacity" />
+                        <svg 
+                          xmlns="http://www.w3.org/2000/svg" 
+                          viewBox="0 0 24 24" 
+                          fill="none" 
+                          stroke="currentColor" 
+                          strokeWidth="2" 
+                          strokeLinecap="round" 
+                          strokeLinejoin="round" 
+                          className="w-3 h-3 ml-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                          <path d="M15 3h6v6" />
+                          <path d="M10 14L21 3" />
+                        </svg>
                       )}
                     </Link>
                   </li>
@@ -148,11 +184,15 @@ export const Footer: React.FC = () => {
 
         {/* Bottom Footer */}
         <div className="flex flex-col md:flex-row justify-between items-center">
+          <div className="flex items-center space-x-2 mb-4 md:mb-0">
+            <img src="/51st Admin logo.png" alt="51st Admin logo" className="h-12 w-auto" />
+            <span className="text-sm text-primary-foreground/90 font-medium">51st UGLSU Administration</span>
+          </div>
           <div className="text-sm text-primary-foreground/80 mb-4 md:mb-0">
             © 2025 University of Ghana Law Students' Union. All rights reserved.
           </div>
 
-          {/* Powered by RoomBerl */}
+          {/* Powered by RoomBerl LTD */}
           <div className="text-sm text-primary-foreground/80 mb-4 md:mb-0">
             Powered by{" "}
             <a 
@@ -161,7 +201,7 @@ export const Footer: React.FC = () => {
               rel="noopener noreferrer"
               className="text-accent hover:text-accent/80 transition-colors underline"
             >
-              RoomBerl
+              RoomBerl LTD
             </a>
           </div>
 
@@ -171,10 +211,16 @@ export const Footer: React.FC = () => {
               <a
                 key={social.name}
                 href={social.href}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-primary-foreground/60 hover:text-accent transition-smooth"
                 aria-label={social.name}
               >
-                <social.icon className="w-5 h-5" />
+                {typeof social.icon === 'function' ? (
+                  social.icon({ className: 'w-5 h-5' })
+                ) : (
+                  <social.icon className="w-5 h-5" />
+                )}
               </a>
             ))}
           </div>

@@ -50,28 +50,34 @@ const Contact = () => {
   const executiveContacts = [
     {
       position: "President",
-      name: "Kwame Asante",
-      email: "president@uglsu.org",
-      phone: "+233 24 123 4567"
+      name: "NAHUM AGYEPONG",
+      email: "thenahumagyepong@gmail.com",
+      linkedin: "https://linkedin.com/in/nahum-agyepong-ab45a7278",
     },
     {
       position: "Vice President",
-      name: "Akosua Mensah", 
-      email: "vicepresident@uglsu.org",
-      phone: "+233 24 234 5678"
+      name: "KINGSLEY OTU-AMPONSAH",
+      email: "kingotuamp@gmail.com",
+      linkedin: "https://linkedin.com/in/kingsley-otu-amponsah-204796218",
     },
     {
-      position: "Secretary General",
-      name: "Kweku Osei",
-      email: "secretary@uglsu.org",
-      phone: "+233 24 345 6789"
+      position: "General Secretary",
+      name: "HUSNA AYARIGA",
+      email: "ayarigahusna@gmail.com",
+      linkedin: "https://linkedin.com/in/husna-ayariga-56a854212",
     },
     {
-      position: "Financial Secretary",
-      name: "Ama Boateng",
-      email: "finance@uglsu.org",
-      phone: "+233 24 456 7890"
-    }
+      position: "General Secretary",
+      name: "GILBERT TINADAGA S.",
+      email: "tinadagasongze@gmail.com",
+      linkedin: "",
+    },
+    {
+      position: "Treasurer",
+      name: "SHIELA ZIEM",
+      email: "ziemshiela99@gmail.com",
+      linkedin: "https://linkedin.com/in/sheila-ziem-76741b354",
+    },
   ];
 
   return (
@@ -171,12 +177,19 @@ const Contact = () => {
                           {executive.email}
                         </a>
                       </div>
-                      <div className="flex items-center space-x-2 text-sm">
-                        <Phone className="w-4 h-4 text-muted-foreground" />
-                        <a href={`tel:${executive.phone}`} className="text-primary hover:underline">
-                          {executive.phone}
-                        </a>
-                      </div>
+                      {executive.linkedin && (
+                        <div className="flex items-center space-x-2 text-sm">
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-linkedin w-4 h-4 text-muted-foreground"><path d="M16 8a6 6 0 0 1 6 6v5h-4v-5a2 2 0 0 0-2-2 2 2 0 0 0-2 2v5h-4v-8h4v2.1"></path><rect width="4" height="4" x="2" y="9" rx="1"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+                          <a
+                            href={executive.linkedin}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-primary hover:underline"
+                          >
+                            LinkedIn
+                          </a>
+                        </div>
+                      )}
                     </div>
                   </CardContent>
                 </Card>
