@@ -87,12 +87,12 @@ export const QuickLinksSection: React.FC = () => {
 
                 <Button 
                   variant="ghost" 
-                  className="w-full bg-foreground text-background hover:bg-foreground/90" 
+                  className="w-full bg-foreground text-background hover:bg-foreground/90 hover:text-white" 
                   asChild
                 >
                   <Link to={link.href} className="group flex items-center justify-center space-x-2">
-                    <span>Explore</span>
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    <span className="group-hover:text-white">Explore</span>
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform group-hover:text-white" />
                   </Link>
                 </Button>
               </CardContent>

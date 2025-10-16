@@ -31,6 +31,7 @@ const footerSections = [
     links: [
       { name: 'Legally Speakin Blog', href: '/blog' },
       { name: 'Judicial Decisions', href: '/judicial-decisions' },
+      { name: 'LSU Law Firms', href: '/law-firms' },
       { name: 'Student Services', href: '/services' },
       { name: 'Academic Support', href: '/support' },
     ]

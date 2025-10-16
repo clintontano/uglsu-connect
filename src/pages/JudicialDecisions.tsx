@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Download, FileText, Calendar } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Navigation } from "@/components/ui/navigation";
@@ -18,7 +19,9 @@ interface JudicialDecision {
 
 const JudicialDecisions = () => {
   const [decisions, setDecisions] = useState<JudicialDecision[]>([]);
+  const [filteredDecisions, setFilteredDecisions] = useState<JudicialDecision[]>([]);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
   const { toast } = useToast();
 
   useEffect(() => {
@@ -34,6 +37,7 @@ const JudicialDecisions = () => {
 
       if (error) throw error;
       setDecisions(data || []);
+      setFilteredDecisions(data || []);
     } catch (error) {
       console.error("Error fetching decisions:", error);
       toast({
@@ -50,6 +54,25 @@ const JudicialDecisions = () => {
     window.open(pdfUrl, "_blank");
   };
 
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    if (!query.trim()) {
+      setFilteredDecisions(decisions);
+      return;
+    }
+    
+    const filtered = decisions.filter((decision) => {
+      const searchLower = query.toLowerCase();
+      return (
+        decision.title.toLowerCase().includes(searchLower) ||
+        decision.date.toLowerCase().includes(searchLower) ||
+        (decision.description && decision.description.toLowerCase().includes(searchLower))
+      );
+    });
+    
+    setFilteredDecisions(filtered);
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navigation />
@@ -57,27 +80,39 @@ const JudicialDecisions = () => {
       <main className="flex-1">
         <section className="py-16 px-4 bg-muted/20">
           <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-12">
-              <h1 className="text-4xl font-bold mb-4">Judicial Decisions</h1>
+            <div className="text-center mb-8">
+              <h1 className="text-4xl font-bold mb-4">LSU Judicial Board Decisions</h1>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
                 Access past decisions made by the UGLSU Judicial Board. These documents provide transparency and guidance on matters affecting the law student community.
               </p>
+            </div>
+
+            <div className="max-w-xl mx-auto mb-12">
+              <Input
+                type="text"
+                placeholder="Search by title, date, or description..."
+                value={searchQuery}
+                onChange={(e) => handleSearch(e.target.value)}
+                className="w-full"
+              />
             </div>
 
             {loading ? (
               <div className="text-center py-12">
                 <p className="text-muted-foreground">Loading decisions...</p>
               </div>
-            ) : decisions.length === 0 ? (
+            ) : filteredDecisions.length === 0 ? (
               <Card>
                 <CardContent className="py-12 text-center">
                   <FileText className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-                  <p className="text-muted-foreground">No judicial decisions available at this time.</p>
+                  <p className="text-muted-foreground">
+                    {searchQuery ? "No decisions match your search." : "No judicial decisions available at this time."}
+                  </p>
                 </CardContent>
               </Card>
             ) : (
               <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                {decisions.map((decision) => (
+                {filteredDecisions.map((decision) => (
                   <Card key={decision.id} className="hover:shadow-lg transition-shadow">
                     <CardHeader>
                       <div className="flex items-start justify-between gap-2">
