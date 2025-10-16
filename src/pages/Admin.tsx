@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { LogOut, Calendar, Bell, BookOpen, Newspaper, Mail, Users, MessageSquare } from "lucide-react";
 import EventsManager from "@/components/admin/EventsManager";
@@ -16,6 +16,7 @@ import SuggestionsManager from "@/components/admin/SuggestionsManager";
 const Admin = () => {
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [activeTab, setActiveTab] = useState("events");
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -73,71 +74,71 @@ const Admin = () => {
   return (
     <div className="min-h-screen bg-background flex">
       {/* Sidebar */}
-      <aside className="w-64 border-r bg-muted/20">
+      <aside className="w-64 border-r bg-muted/20 flex flex-col relative">
         <div className="p-6 border-b">
           <h1 className="text-xl font-bold">Admin Dashboard</h1>
         </div>
-        <nav className="p-4 space-y-1">
+        <nav className="p-4 space-y-1 flex-1">
           <Button
-            variant="ghost"
+            variant={activeTab === "events" ? "default" : "ghost"}
             className="w-full justify-start"
-            onClick={() => document.querySelector('[value="events"]')?.dispatchEvent(new Event('click', { bubbles: true }))}
+            onClick={() => setActiveTab("events")}
           >
             <Calendar className="mr-2 h-4 w-4" />
             Events
           </Button>
           <Button
-            variant="ghost"
+            variant={activeTab === "notices" ? "default" : "ghost"}
             className="w-full justify-start"
-            onClick={() => document.querySelector('[value="notices"]')?.dispatchEvent(new Event('click', { bubbles: true }))}
+            onClick={() => setActiveTab("notices")}
           >
             <Bell className="mr-2 h-4 w-4" />
             Notices
           </Button>
           <Button
-            variant="ghost"
+            variant={activeTab === "library" ? "default" : "ghost"}
             className="w-full justify-start"
-            onClick={() => document.querySelector('[value="library"]')?.dispatchEvent(new Event('click', { bubbles: true }))}
+            onClick={() => setActiveTab("library")}
           >
             <BookOpen className="mr-2 h-4 w-4" />
             Library
           </Button>
           <Button
-            variant="ghost"
+            variant={activeTab === "blog" ? "default" : "ghost"}
             className="w-full justify-start"
-            onClick={() => document.querySelector('[value="blog"]')?.dispatchEvent(new Event('click', { bubbles: true }))}
+            onClick={() => setActiveTab("blog")}
           >
             <Newspaper className="mr-2 h-4 w-4" />
             Blog
           </Button>
           <div className="border-t my-2"></div>
           <Button
-            variant="ghost"
+            variant={activeTab === "community" ? "default" : "ghost"}
             className="w-full justify-start"
-            onClick={() => document.querySelector('[value="community"]')?.dispatchEvent(new Event('click', { bubbles: true }))}
+            onClick={() => setActiveTab("community")}
           >
             <Users className="mr-2 h-4 w-4" />
             Community Members
           </Button>
           <Button
-            variant="ghost"
+            variant={activeTab === "newsletter" ? "default" : "ghost"}
             className="w-full justify-start"
-            onClick={() => document.querySelector('[value="newsletter"]')?.dispatchEvent(new Event('click', { bubbles: true }))}
+            onClick={() => setActiveTab("newsletter")}
           >
             <Mail className="mr-2 h-4 w-4" />
             Newsletter
           </Button>
           <Button
-            variant="ghost"
+            variant={activeTab === "suggestions" ? "default" : "ghost"}
             className="w-full justify-start"
-            onClick={() => document.querySelector('[value="suggestions"]')?.dispatchEvent(new Event('click', { bubbles: true }))}
+            onClick={() => setActiveTab("suggestions")}
           >
             <MessageSquare className="mr-2 h-4 w-4" />
             Suggestions
           </Button>
         </nav>
-        <div className="absolute bottom-4 left-4 right-4">
-          <Button onClick={handleSignOut} variant="outline" className="w-full">
+        <div className="p-4 border-t">
+          <Button onClick={handleSignOut} variant="outline" size="sm" className="w-full">
             <LogOut className="mr-2 h-4 w-4" />
             Sign Out
           </Button>
@@ -153,16 +154,7 @@ const Admin = () => {
         </header>
 
         <div className="p-8">
-          <Tabs defaultValue="events" className="w-full">
-            <TabsList className="grid w-full grid-cols-7 mb-6">
-              <TabsTrigger value="events">Events</TabsTrigger>
-              <TabsTrigger value="notices">Notices</TabsTrigger>
-              <TabsTrigger value="library">Library</TabsTrigger>
-              <TabsTrigger value="blog">Blog</TabsTrigger>
-              <TabsTrigger value="community">Community</TabsTrigger>
-              <TabsTrigger value="newsletter">Newsletter</TabsTrigger>
-              <TabsTrigger value="suggestions">Suggestions</TabsTrigger>
-            </TabsList>
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
 
             <TabsContent value="events">
               <EventsManager />
