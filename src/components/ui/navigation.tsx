@@ -50,7 +50,7 @@ export const Navigation: React.FC<NavigationProps> = ({ className }) => {
           <div className="flex items-center space-x-4">
             <Link to="/" className="flex items-center space-x-3">
               <img 
-                src="/uglsu-logo.png" 
+                src="/LSU logo.PNG" 
                 alt="UGLSU Logo" 
                 className="w-10 h-10 rounded-lg object-cover"
               />

@@ -2,7 +2,6 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Users, BookOpen, Calendar } from 'lucide-react';
-import heroImage from '@/assets/hero-image.jpg';
 
 export const HeroSection: React.FC = () => {
   return (
@@ -10,7 +9,7 @@ export const HeroSection: React.FC = () => {
       {/* Background Image with Overlay */}
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: `url(${heroImage})` }}
+        style={{ backgroundImage: `url('/Hero Image.jpg')` }}
       >
         <div className="absolute inset-0 hero-overlay" />
       </div>
