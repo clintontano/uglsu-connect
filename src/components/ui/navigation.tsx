@@ -29,10 +29,9 @@ const navItems = [
   { name: 'Home', href: '/', icon: Home },
   { name: 'About', href: '/about', icon: Users },
   { name: 'Events', href: '/events', icon: Calendar },
+  { name: 'Notices', href: '/notices', icon: Bell },
   { name: 'Digital Library', href: '/library', icon: Library },
   { name: 'Legally Speakin', href: '/blog', icon: BookOpen },
-  { name: 'Notices', href: '/notices', icon: Bell },
-  { name: 'Contact', href: '/contact', icon: Phone },
 ];
 
 interface NavigationProps {

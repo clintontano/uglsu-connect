@@ -26,6 +26,7 @@ import {
   Library,
   PenTool
 } from 'lucide-react';
+import { ContactExcerptSection } from '@/components/sections/contact-excerpt';
 
 const executiveMembers = [
   {
@@ -372,6 +373,9 @@ const About = () => {
             </div>
           </div>
         </section>
+
+        {/* Contact Excerpt Section */}
+        <ContactExcerptSection />
 
         {/* CTA Section */}
         <section className="py-20">
