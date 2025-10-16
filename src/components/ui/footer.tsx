@@ -30,7 +30,7 @@ const footerSections = [
     title: 'Resources',
     links: [
       { name: 'Legally Speakin Blog', href: '/blog' },
-      
+      { name: 'Judicial Decisions', href: '/judicial-decisions' },
       { name: 'Student Services', href: '/services' },
       { name: 'Academic Support', href: '/support' },
     ]

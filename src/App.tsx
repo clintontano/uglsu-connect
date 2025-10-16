@@ -20,6 +20,7 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import StudentServices from "./pages/StudentServices";
 import AcademicSupport from "./pages/AcademicSupport";
 import InternshipAccess from "./pages/InternshipAccess";
+import JudicialDecisions from "./pages/JudicialDecisions";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -48,6 +49,7 @@ const App = () => (
           <Route path="/services" element={<StudentServices />} />
           <Route path="/support" element={<AcademicSupport />} />
           <Route path="/internship" element={<InternshipAccess />} />
+          <Route path="/judicial-decisions" element={<JudicialDecisions />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

@@ -122,6 +122,36 @@ export type Database = {
         }
         Relationships: []
       }
+      judicial_decisions: {
+        Row: {
+          created_at: string | null
+          date: string
+          description: string | null
+          id: string
+          pdf_url: string
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          date: string
+          description?: string | null
+          id?: string
+          pdf_url: string
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          date?: string
+          description?: string | null
+          id?: string
+          pdf_url?: string
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       library_documents: {
         Row: {
           author: string | null

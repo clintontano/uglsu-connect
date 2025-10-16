@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { LogOut, Calendar, Bell, BookOpen, Newspaper, Mail, Users, MessageSquare } from "lucide-react";
+import { LogOut, Calendar, Bell, BookOpen, Newspaper, Mail, Users, MessageSquare, Scale } from "lucide-react";
 import EventsManager from "@/components/admin/EventsManager";
 import NoticesManager from "@/components/admin/NoticesManager";
 import LibraryManager from "@/components/admin/LibraryManager";
@@ -12,6 +12,7 @@ import BlogManager from "@/components/admin/BlogManager";
 import CommunityMembersManager from "@/components/admin/CommunityMembersManager";
 import NewsletterManager from "@/components/admin/NewsletterManager";
 import SuggestionsManager from "@/components/admin/SuggestionsManager";
+import JudicialDecisionsManager from "@/components/admin/JudicialDecisionsManager";
 
 const Admin = () => {
   const [loading, setLoading] = useState(true);
@@ -136,6 +137,14 @@ const Admin = () => {
             <MessageSquare className="mr-2 h-4 w-4" />
             Suggestions
           </Button>
+          <Button
+            variant={activeTab === "judicial" ? "default" : "ghost"}
+            className="w-full justify-start"
+            onClick={() => setActiveTab("judicial")}
+          >
+            <Scale className="mr-2 h-4 w-4" />
+            Judicial Decisions
+          </Button>
         </nav>
         <div className="p-4 border-t">
           <Button onClick={handleSignOut} variant="outline" size="sm" className="w-full">
@@ -182,6 +191,10 @@ const Admin = () => {
 
             <TabsContent value="suggestions">
               <SuggestionsManager />
+            </TabsContent>
+
+            <TabsContent value="judicial">
+              <JudicialDecisionsManager />
             </TabsContent>
           </Tabs>
         </div>
