@@ -34,14 +34,14 @@ const executiveMembers = [
     position: 'President',
     email: 'thenahumagyepong@gmail.com',
     linkedin: 'https://linkedin.com/in/nahum-agyepong-ab45a7278',
-    image: '/Nahum Agyepong.png',
+    image: '/nahum-agyepong.png',
   },
   {
     name: 'KINGSLEY OTU-AMPONSAH',
     position: 'Vice President',
     email: 'kingotuamp@gmail.com',
     linkedin: 'https://linkedin.com/in/kingsley-otu-amponsah-204796218',
-    image: '/Kingsley Otu-Amponsah.png',
+    image: '/kingsley-otu-amponsah.png',
     nameClass: 'whitespace-nowrap', // option for custom utility class
   },
   {
@@ -49,21 +49,21 @@ const executiveMembers = [
     position: 'General Secretary',
     email: 'ayarigahusna@gmail.com',
     linkedin: 'https://linkedin.com/in/husna-ayariga-56a854212',
-    image: '/Husna Ayariga.jpeg',
+    image: '/husna-ayariga.jpeg',
   },
   {
     name: 'GILBERT TINADAGA S.',
     position: 'General Secretary',
     email: 'tinadagasongze@gmail.com',
     linkedin: '',
-    image: '/Gilbert Tinadag.jpg',
+    image: '/gilbert-tinadag.jpg',
   },
   {
     name: 'SHIELA ZIEM',
     position: 'Treasurer',
     email: 'ziemshiela99@gmail.com',
     linkedin: 'https://linkedin.com/in/sheila-ziem-76741b354',
-    image: '/Shiela Ziem.jpeg',
+    image: '/shiela-ziem.jpeg',
   },
 ];
 
@@ -137,7 +137,7 @@ const About = () => {
                 <div className="flex flex-col md:flex-row gap-8 items-center">
                   <div className="w-40 h-40 bg-muted rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden mx-auto mb-6">
                     <img
-                      src="/Dr. Samuel Obeng Manteaw.jpg"
+                      src="/dr-samuel-obeng-manteaw.jpg"
                       alt="Dr. Samuel Obeng Manteaw"
                       className="w-full h-full object-cover"
                     />
