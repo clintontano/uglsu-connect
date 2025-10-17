@@ -8,6 +8,7 @@ import About from "./pages/About";
 import Events from "./pages/Events";
 import Library from "./pages/Library";
 import Blog from "./pages/Blog";
+import BlogPost from "./pages/BlogPost";
 import Notices from "./pages/Notices";
 import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
@@ -38,6 +39,7 @@ const App = () => (
           <Route path="/events" element={<Events />} />
           <Route path="/library" element={<Library />} />
           <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/:id" element={<BlogPost />} />
           <Route path="/notices" element={<Notices />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/admin" element={<Admin />} />

@@ -6,8 +6,12 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { Edit, Trash2 } from "lucide-react";
+import { Edit, Trash2, CalendarIcon } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
 
 interface BlogPost {
   id: string;
@@ -34,7 +38,9 @@ const BlogManager = () => {
     image_url: "",
     pdf_url: "",
   });
+  const [selectedDate, setSelectedDate] = useState<Date>();
   const [pdfFile, setPdfFile] = useState<File | null>(null);
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -58,6 +64,39 @@ const BlogManager = () => {
     e.preventDefault();
 
     let pdfUrl = formData.pdf_url;
+    let imageUrl = formData.image_url;
+
+    // Upload image if provided
+    if (imageFile) {
+      // Check file size (7MB = 7 * 1024 * 1024 bytes)
+      if (imageFile.size > 7 * 1024 * 1024) {
+        toast({ 
+          title: "Error", 
+          description: "Image file size must be less than 7MB", 
+          variant: "destructive" 
+        });
+        return;
+      }
+
+      const fileExt = imageFile.name.split('.').pop();
+      const fileName = `${Math.random()}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('blog-images')
+        .upload(filePath, imageFile);
+
+      if (uploadError) {
+        toast({ title: "Error", description: uploadError.message, variant: "destructive" });
+        return;
+      }
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('blog-images')
+        .getPublicUrl(filePath);
+
+      imageUrl = publicUrl;
+    }
 
     // Upload PDF if provided
     if (pdfFile) {
@@ -83,7 +122,7 @@ const BlogManager = () => {
 
     const submitData = {
       ...formData,
-      image_url: formData.image_url || null,
+      image_url: imageUrl || null,
       pdf_url: pdfUrl || null,
     };
 
@@ -125,7 +164,9 @@ const BlogManager = () => {
       image_url: post.image_url || "",
       pdf_url: post.pdf_url || "",
     });
+    setSelectedDate(post.date ? new Date(post.date) : undefined);
     setPdfFile(null);
+    setImageFile(null);
   };
 
   const handleDelete = async (id: string) => {
@@ -153,7 +194,9 @@ const BlogManager = () => {
       image_url: "",
       pdf_url: "",
     });
+    setSelectedDate(undefined);
     setPdfFile(null);
+    setImageFile(null);
   };
 
   return (
@@ -200,11 +243,35 @@ const BlogManager = () => {
               </div>
               <div className="space-y-2">
                 <Label>Date</Label>
-                <Input
-                  value={formData.date}
-                  onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                  required
-                />
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className={cn(
+                        "w-full justify-start text-left font-normal",
+                        !selectedDate && "text-muted-foreground"
+                      )}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {selectedDate ? format(selectedDate, "PPP") : "Pick a date"}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={selectedDate}
+                      onSelect={(date) => {
+                        setSelectedDate(date);
+                        setFormData({ 
+                          ...formData, 
+                          date: date ? format(date, "yyyy-MM-dd") : "" 
+                        });
+                      }}
+                      initialFocus
+                      className="pointer-events-auto"
+                    />
+                  </PopoverContent>
+                </Popover>
               </div>
             </div>
             <div className="space-y-2">
@@ -218,11 +285,15 @@ const BlogManager = () => {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label>Image URL (optional)</Label>
+                <Label>Featured Image (optional, max 7MB)</Label>
                 <Input
-                  value={formData.image_url}
-                  onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => setImageFile(e.target.files?.[0] || null)}
                 />
+                {formData.image_url && (
+                  <p className="text-sm text-muted-foreground">Current image uploaded</p>
+                )}
               </div>
               <div className="space-y-2">
                 <Label>PDF Document (optional, max 20MB)</Label>
@@ -232,7 +303,7 @@ const BlogManager = () => {
                   onChange={(e) => setPdfFile(e.target.files?.[0] || null)}
                 />
                 {formData.pdf_url && (
-                  <p className="text-sm text-muted-foreground">Current: {formData.pdf_url}</p>
+                  <p className="text-sm text-muted-foreground">Current PDF uploaded</p>
                 )}
               </div>
             </div>

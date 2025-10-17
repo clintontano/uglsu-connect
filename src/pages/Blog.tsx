@@ -5,7 +5,7 @@ import { Footer } from '@/components/ui/footer';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Calendar, User, ArrowRight } from 'lucide-react';
+import { Calendar, User, ArrowRight, Download } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
@@ -107,6 +107,15 @@ const Blog = () => {
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
               {featuredPosts.map((post) => (
                 <Card key={post.id} className="group hover:shadow-elegant transition-shadow">
+                  {post.image_url && (
+                    <div className="overflow-hidden">
+                      <img 
+                        src={post.image_url} 
+                        alt={post.title}
+                        className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                    </div>
+                  )}
                   <CardHeader>
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-sm text-muted-foreground">{post.read_time}</span>
@@ -124,11 +133,21 @@ const Blog = () => {
                         <Calendar className="w-4 h-4 ml-2" />
                         <span>{new Date(post.date).toLocaleDateString()}</span>
                       </div>
-                      <Button variant="ghost" size="sm" className="group">
-                        Read More
-                        <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+                      <Button variant="ghost" size="sm" className="group" asChild>
+                        <Link to={`/blog/${post.id}`}>
+                          Read More
+                          <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+                        </Link>
                       </Button>
                     </div>
+                    {post.pdf_url && (
+                      <Button variant="outline" size="sm" className="mt-4 w-full" asChild>
+                        <a href={post.pdf_url} target="_blank" rel="noopener noreferrer">
+                          <Download className="w-4 h-4 mr-2" />
+                          Download PDF
+                        </a>
+                      </Button>
+                    )}
                   </CardContent>
                 </Card>
               ))}

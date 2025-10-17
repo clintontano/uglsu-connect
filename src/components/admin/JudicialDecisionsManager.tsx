@@ -5,8 +5,12 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { Trash2, FileText, Upload } from "lucide-react";
+import { Trash2, FileText, Upload, CalendarIcon } from "lucide-react";
 import { Label } from "@/components/ui/label";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
 
 interface JudicialDecision {
   id: string;
@@ -24,6 +28,7 @@ const JudicialDecisionsManager = () => {
     date: "",
     description: "",
   });
+  const [selectedDate, setSelectedDate] = useState<Date>();
   const [pdfFile, setPdfFile] = useState<File | null>(null);
   const { toast } = useToast();
 
@@ -110,6 +115,7 @@ const JudicialDecisionsManager = () => {
       });
 
       setFormData({ title: "", date: "", description: "" });
+      setSelectedDate(undefined);
       setPdfFile(null);
       fetchDecisions();
     } catch (error) {
@@ -176,13 +182,35 @@ const JudicialDecisionsManager = () => {
 
             <div>
               <Label htmlFor="date">Date</Label>
-              <Input
-                id="date"
-                type="date"
-                value={formData.date}
-                onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                required
-              />
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className={cn(
+                      "w-full justify-start text-left font-normal",
+                      !selectedDate && "text-muted-foreground"
+                    )}
+                  >
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {selectedDate ? format(selectedDate, "PPP") : "Pick a date"}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={selectedDate}
+                    onSelect={(date) => {
+                      setSelectedDate(date);
+                      setFormData({ 
+                        ...formData, 
+                        date: date ? format(date, "yyyy-MM-dd") : "" 
+                      });
+                    }}
+                    initialFocus
+                    className="pointer-events-auto"
+                  />
+                </PopoverContent>
+              </Popover>
             </div>
 
             <div>

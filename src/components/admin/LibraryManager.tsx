@@ -226,14 +226,6 @@ const LibraryManager = () => {
                 />
               </div>
             </div>
-            <div className="space-y-2">
-              <Label>Tags (comma-separated)</Label>
-              <Input
-                value={formData.tags}
-                onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
-                placeholder="tag1, tag2, tag3"
-              />
-            </div>
             <div className="flex gap-2">
               <Button type="submit">
                 {editingId ? "Update" : "Create"} Document

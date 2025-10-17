@@ -220,12 +220,19 @@ const Library = () => {
                         </div>
                         
                         <div className="flex space-x-2">
-                          <Button variant="ghost" size="sm">
-                            <Eye className="w-4 h-4" />
-                          </Button>
-                          <Button variant="library" size="sm">
-                            <Download className="w-4 h-4" />
-                          </Button>
+                          {item.file_url && (
+                            <Button variant="library" size="sm" asChild>
+                              <a 
+                                href={item.file_url} 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                download
+                              >
+                                <Download className="w-4 h-4 mr-2" />
+                                Download PDF
+                              </a>
+                            </Button>
+                          )}
                         </div>
                       </div>
                     </div>

@@ -6,8 +6,12 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { Plus, Edit, Trash2 } from "lucide-react";
+import { Plus, Edit, Trash2, CalendarIcon } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
 
 interface Event {
   id: string;
@@ -36,6 +40,7 @@ const EventsManager = () => {
     status: "upcoming",
     registration_open: true,
   });
+  const [selectedDate, setSelectedDate] = useState<Date>();
   const [flyerFile, setFlyerFile] = useState<File | null>(null);
   const { toast } = useToast();
 
@@ -124,6 +129,7 @@ const EventsManager = () => {
       status: event.status,
       registration_open: event.registration_open,
     });
+    setSelectedDate(event.date ? new Date(event.date) : undefined);
     setFlyerFile(null);
   };
 
@@ -153,6 +159,7 @@ const EventsManager = () => {
       status: "upcoming",
       registration_open: true,
     });
+    setSelectedDate(undefined);
     setFlyerFile(null);
   };
 
@@ -195,12 +202,35 @@ const EventsManager = () => {
             <div className="grid grid-cols-3 gap-4">
               <div className="space-y-2">
                 <Label>Date</Label>
-                <Input
-                  type="date"
-                  value={formData.date}
-                  onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                  required
-                />
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className={cn(
+                        "w-full justify-start text-left font-normal",
+                        !selectedDate && "text-muted-foreground"
+                      )}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {selectedDate ? format(selectedDate, "PPP") : "Pick a date"}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={selectedDate}
+                      onSelect={(date) => {
+                        setSelectedDate(date);
+                        setFormData({ 
+                          ...formData, 
+                          date: date ? format(date, "yyyy-MM-dd") : "" 
+                        });
+                      }}
+                      initialFocus
+                      className="pointer-events-auto"
+                    />
+                  </PopoverContent>
+                </Popover>
               </div>
               <div className="space-y-2">
                 <Label>Time</Label>
