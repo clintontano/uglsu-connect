@@ -9,7 +9,7 @@ export const HeroSection: React.FC = () => {
       {/* Background Image with Overlay */}
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: `url('/Hero Image.jpg')` }}
+        style={{ backgroundImage: `url('/hero-image.jpg')` }}
       >
         <div className="absolute inset-0 hero-overlay" />
       </div>
