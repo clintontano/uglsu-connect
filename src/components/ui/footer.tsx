@@ -98,7 +98,7 @@ export const Footer: React.FC = () => {
             <div className="flex items-center space-x-3 mb-6">
               <div className="w-12 h-12 rounded-lg overflow-hidden">
                 <img 
-                  src="/uglsu-logo.png" 
+                  src="/lsu-logo.png" 
                   alt="UGLSU Logo" 
                   className="w-full h-full object-contain"
                 />
