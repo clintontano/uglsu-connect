@@ -1,6 +1,7 @@
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import ChatbotWidget from "./components/chatbot/ChatbotWidget";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
@@ -24,6 +25,7 @@ import InternshipAccess from "./pages/InternshipAccess";
 import JudicialDecisions from "./pages/JudicialDecisions";
 import LawFirms from "./pages/LawFirms";
 import NotFound from "./pages/NotFound";
+import LeadAttorneys from "./pages/LeadAttorneys";
 
 const queryClient = new QueryClient();
 
@@ -32,6 +34,7 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
+      <ChatbotWidget />
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
@@ -54,6 +57,7 @@ const App = () => (
           <Route path="/internship" element={<InternshipAccess />} />
           <Route path="/judicial-decisions" element={<JudicialDecisions />} />
           <Route path="/law-firms" element={<LawFirms />} />
+          <Route path="/law-firms/lead-attorneys" element={<LeadAttorneys />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
