@@ -244,25 +244,28 @@ export type Database = {
       }
       suggestions: {
         Row: {
+          category: string
           created_at: string | null
-          email: string
+          email: string | null
           id: string
           message: string
-          name: string
+          name: string | null
         }
         Insert: {
+          category?: string
           created_at?: string | null
-          email: string
+          email?: string | null
           id?: string
           message: string
-          name: string
+          name?: string | null
         }
         Update: {
+          category?: string
           created_at?: string | null
-          email?: string
+          email?: string | null
           id?: string
           message?: string
-          name?: string
+          name?: string | null
         }
         Relationships: []
       }
@@ -292,10 +295,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      is_admin: {
-        Args: { user_id: string }
-        Returns: boolean
-      }
+      is_admin: { Args: { user_id: string }; Returns: boolean }
     }
     Enums: {
       app_role: "admin" | "user"
