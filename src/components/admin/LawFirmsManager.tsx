@@ -68,7 +68,7 @@ const LawFirmsManager = () => {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setLawFirms(data || []);
+      setLawFirms((data as any[]) || []);
     } catch (error: any) {
       toast({
         title: "Error",
@@ -94,7 +94,7 @@ const LawFirmsManager = () => {
 
       if (editingFirm) {
         const { error } = await supabase
-          .from('law_firms')
+          .from('law_firms' as any)
           .update(submitData)
           .eq('id', editingFirm.id);
 
@@ -105,7 +105,7 @@ const LawFirmsManager = () => {
         });
       } else {
         const { error } = await supabase
-          .from('law_firms')
+          .from('law_firms' as any)
           .insert(submitData);
 
         if (error) throw error;
@@ -150,7 +150,7 @@ const LawFirmsManager = () => {
 
     try {
       const { error } = await supabase
-        .from('law_firms')
+        .from('law_firms' as any)
         .delete()
         .eq('id', id);
 

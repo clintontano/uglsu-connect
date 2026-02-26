@@ -64,12 +64,12 @@ const ExternalCompetitionsManager = () => {
   const fetchCompetitions = async () => {
     try {
       const { data, error } = await supabase
-        .from('external_competitions')
+        .from('external_competitions' as any)
         .select('*')
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setCompetitions(data || []);
+      setCompetitions((data as any[]) || []);
     } catch (error: any) {
       toast({
         title: "Error",
@@ -88,7 +88,7 @@ const ExternalCompetitionsManager = () => {
     try {
       if (editingCompetition) {
         const { error } = await supabase
-          .from('external_competitions')
+          .from('external_competitions' as any)
           .update(formData)
           .eq('id', editingCompetition.id);
 
@@ -99,7 +99,7 @@ const ExternalCompetitionsManager = () => {
         });
       } else {
         const { error } = await supabase
-          .from('external_competitions')
+          .from('external_competitions' as any)
           .insert(formData);
 
         if (error) throw error;
@@ -133,7 +133,8 @@ const ExternalCompetitionsManager = () => {
       deadline: competition.deadline,
       location: competition.location,
       participants: competition.participants,
-      status: competition.status
+      status: competition.status,
+      application_guidelines: competition.application_guidelines || ''
     });
     setIsFormOpen(true);
   };
@@ -143,7 +144,7 @@ const ExternalCompetitionsManager = () => {
 
     try {
       const { error } = await supabase
-        .from('external_competitions')
+        .from('external_competitions' as any)
         .delete()
         .eq('id', id);
 
@@ -172,7 +173,8 @@ const ExternalCompetitionsManager = () => {
       deadline: '',
       location: '',
       participants: '',
-      status: 'upcoming'
+      status: 'upcoming',
+      application_guidelines: ''
     });
     setEditingCompetition(null);
     setIsFormOpen(false);
