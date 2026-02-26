@@ -84,6 +84,7 @@ const Admin = () => {
             <Calendar className="mr-2 h-4 w-4" />
             Events
           </Button>
+          {/* Temporarily hidden Library section
           <Button
             variant={activeTab === "library" ? "default" : "ghost"}
             className="w-full justify-start"
@@ -92,6 +93,7 @@ const Admin = () => {
             <BookOpen className="mr-2 h-4 w-4" />
             Library (Image Uploads)
           </Button>
+          */}
           <Button
             variant={activeTab === "lawfirms" ? "default" : "ghost"}
             className="w-full justify-start"
@@ -132,9 +134,11 @@ const Admin = () => {
               <EventsManager />
             </TabsContent>
 
+            {/* Temporarily hidden Library section
             <TabsContent value="library">
               <LibraryManager />
             </TabsContent>
+            */}
 
             <TabsContent value="lawfirms">
               <LawFirmsManager />

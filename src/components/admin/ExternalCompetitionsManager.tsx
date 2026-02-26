@@ -53,8 +53,10 @@ const ExternalCompetitionsManager = () => {
     location: '',
     participants: '',
     status: 'upcoming' as 'open' | 'upcoming' | 'closed' | 'completed',
-    application_guidelines: ''
+    application_guidelines: '',
+    image_url: null as string | null
   });
+  const [uploadingImage, setUploadingImage] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -122,6 +124,42 @@ const ExternalCompetitionsManager = () => {
     }
   };
 
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploadingImage(true);
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Date.now()}.${fileExt}`;
+      const filePath = `external-competitions/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('external-competitions')
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('external-competitions')
+        .getPublicUrl(filePath);
+
+      setFormData({ ...formData, image_url: publicUrl });
+      toast({
+        title: "Success",
+        description: "Image uploaded successfully",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: "Failed to upload image",
+        variant: "destructive",
+      });
+    } finally {
+      setUploadingImage(false);
+    }
+  };
+
   const handleEdit = (competition: ExternalCompetition) => {
     setEditingCompetition(competition);
     setFormData({
@@ -133,7 +171,9 @@ const ExternalCompetitionsManager = () => {
       deadline: competition.deadline,
       location: competition.location,
       participants: competition.participants,
-      status: competition.status
+      status: competition.status,
+      application_guidelines: competition.application_guidelines || '',
+      image_url: competition.image_url
     });
     setIsFormOpen(true);
   };
@@ -172,7 +212,9 @@ const ExternalCompetitionsManager = () => {
       deadline: '',
       location: '',
       participants: '',
-      status: 'upcoming'
+      status: 'upcoming',
+      application_guidelines: '',
+      image_url: null
     });
     setEditingCompetition(null);
     setIsFormOpen(false);
@@ -231,6 +273,19 @@ const ExternalCompetitionsManager = () => {
                       required
                     />
                   </div>
+                  <div>
+                    <Label htmlFor="image">Competition Image</Label>
+                    <Input
+                      id="image"
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                      disabled={uploadingImage}
+                    />
+                    {uploadingImage && <p className="text-sm text-muted-foreground">Uploading...</p>}
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <Label htmlFor="organizer">Organizer *</Label>
                     <Input

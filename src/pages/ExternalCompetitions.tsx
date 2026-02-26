@@ -1,80 +1,38 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Navigation } from '@/components/ui/navigation';
 import { Footer } from '@/components/ui/footer';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Trophy, Calendar, MapPin, Users, Target, Award, BookOpen, Globe, Scale } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
 
 const ExternalCompetitions = () => {
-  const competitions = [
-    {
-      title: "Philip C. Jessup International Law Moot Court Competition",
-      organizer: "International Law Students Association (ILSA)",
-      type: "Moot Court",
-      level: "International",
-      description: "The world's largest moot court competition, testing students' skills in international law.",
-      deadline: "December 15, 2025",
-      location: "Washington D.C., USA",
-      participants: "Teams of 2-5 students",
-      status: "open"
-    },
-    {
-      title: "African Human Rights Moot Court Competition",
-      organizer: "Centre for Human Rights, University of Pretoria",
-      type: "Moot Court",
-      level: "Continental",
-      description: "Premier African moot court competition focusing on human rights law.",
-      deadline: "January 30, 2026",
-      location: "Pretoria, South Africa",
-      participants: "Teams of 2-3 students",
-      status: "open"
-    },
-    {
-      title: "All Africa Inter-University Moot Court Competition",
-      organizer: "African Union Commission",
-      type: "Moot Court",
-      level: "Continental",
-      description: "Annual moot court competition bringing together top law students across Africa.",
-      deadline: "February 28, 2026",
-      location: "Addis Ababa, Ethiopia",
-      participants: "Teams of 2-4 students",
-      status: "upcoming"
-    },
-    {
-      title: "International Client Counseling Competition",
-      organizer: "International Bar Association (IBA)",
-      type: "Client Counseling",
-      level: "International",
-      description: "Competition testing practical client interviewing and counseling skills.",
-      deadline: "November 30, 2025",
-      location: "Virtual/Various Locations",
-      participants: "Teams of 2 students",
-      status: "open"
-    },
-    {
-      title: "National Moot Court Competition",
-      organizer: "Ghana Bar Association",
-      type: "Moot Court",
-      level: "National",
-      description: "Ghana's premier moot court competition for law students.",
-      deadline: "March 15, 2026",
-      location: "Accra, Ghana",
-      participants: "Teams of 2-4 students",
-      status: "upcoming"
-    },
-    {
-      title: "World Trade Organization Moot Court Competition",
-      organizer: "WTO Appellate Body Secretariat",
-      type: "Moot Court",
-      level: "International",
-      description: "Specialized competition focusing on international trade law.",
-      deadline: "January 15, 2026",
-      location: "Geneva, Switzerland",
-      participants: "Teams of 2-4 students",
-      status: "open"
+  const [competitions, setCompetitions] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchCompetitions();
+  }, []);
+
+  const fetchCompetitions = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("external_competitions")
+        .select("*")
+        .order("deadline", { ascending: true });
+
+      if (error) {
+        console.error("Error fetching competitions:", error);
+      } else {
+        setCompetitions(data || []);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    } finally {
+      setLoading(false);
     }
-  ];
+  };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -159,8 +117,18 @@ const ExternalCompetitions = () => {
           {/* Competitions List */}
           <section className="mb-16">
             <h2 className="text-3xl font-heading font-bold mb-8">Available Competitions</h2>
-            <div className="grid gap-6">
-              {competitions.map((competition, index) => (
+            {loading ? (
+              <div className="text-center py-12">
+                <p>Loading competitions...</p>
+              </div>
+            ) : competitions.length === 0 ? (
+              <div className="text-center py-12">
+                <h3 className="text-lg font-medium mb-2">No competitions available</h3>
+                <p className="text-muted-foreground">Check back later for updates</p>
+              </div>
+            ) : (
+              <div className="grid gap-6">
+                {competitions.map((competition, index) => (
                 <Card key={index} className="hover:shadow-elegant transition-shadow">
                   <CardHeader>
                     <div className="flex items-start justify-between">
@@ -233,6 +201,7 @@ const ExternalCompetitions = () => {
                 </Card>
               ))}
             </div>
+            )}
           </section>
 
           {/* Contact Information */}

@@ -52,8 +52,10 @@ const LawFirmsManager = () => {
     practice_areas: '',
     founded_year: '',
     partner_count: '',
-    status: 'active' as 'active' | 'inactive'
+    status: 'active' as 'active' | 'inactive',
+    logo_url: null as string | null
   });
+  const [uploadingLogo, setUploadingLogo] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -128,6 +130,42 @@ const LawFirmsManager = () => {
     }
   };
 
+  const handleLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploadingLogo(true);
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Date.now()}.${fileExt}`;
+      const filePath = `law-firms/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('law-firms')
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('law-firms')
+        .getPublicUrl(filePath);
+
+      setFormData({ ...formData, logo_url: publicUrl });
+      toast({
+        title: "Success",
+        description: "Logo uploaded successfully",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: "Failed to upload logo",
+        variant: "destructive",
+      });
+    } finally {
+      setUploadingLogo(false);
+    }
+  };
+
   const handleEdit = (firm: LawFirm) => {
     setEditingFirm(firm);
     setFormData({
@@ -140,7 +178,8 @@ const LawFirmsManager = () => {
       practice_areas: firm.practice_areas.join(', '),
       founded_year: firm.founded_year?.toString() || '',
       partner_count: firm.partner_count?.toString() || '',
-      status: firm.status
+      status: firm.status,
+      logo_url: firm.logo_url
     });
     setIsFormOpen(true);
   };
@@ -180,7 +219,8 @@ const LawFirmsManager = () => {
       practice_areas: '',
       founded_year: '',
       partner_count: '',
-      status: 'active'
+      status: 'active',
+      logo_url: null
     });
     setEditingFirm(null);
     setIsFormOpen(false);
@@ -224,6 +264,19 @@ const LawFirmsManager = () => {
                       required
                     />
                   </div>
+                  <div>
+                    <Label htmlFor="logo">Logo</Label>
+                    <Input
+                      id="logo"
+                      type="file"
+                      accept="image/*"
+                      onChange={handleLogoUpload}
+                      disabled={uploadingLogo}
+                    />
+                    {uploadingLogo && <p className="text-sm text-muted-foreground">Uploading...</p>}
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <Label htmlFor="status">Status</Label>
                     <select
