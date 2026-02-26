@@ -9,17 +9,17 @@ export const ContactExcerptSection = () => {
     {
       icon: <Phone className="w-6 h-6" />,
       title: "Phone",
-      detail: "+233 30 213 7348"
+      detail: "+233 55 154 4080"
     },
     {
       icon: <Mail className="w-6 h-6" />,
       title: "Email",
-      detail: "info@uglsu.org"
+      detail: "lawstudentsunion.ug@gmail.com"
     },
     {
       icon: <MapPin className="w-6 h-6" />,
       title: "Location",
-      detail: "UGLSU Secretariat, Room 204"
+      detail: "Accra, UG Campus, Annie Jiagge Road."
     },
     {
       icon: <Clock className="w-6 h-6" />,

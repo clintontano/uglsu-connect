@@ -48,6 +48,14 @@ const quickLinks = [
     features: ['Exam Schedules', 'Meeting Minutes', 'Important Updates', 'Deadlines']
   },
   {
+    title: 'External Competitions',
+    description: 'Explore prestigious external legal competitions and opportunities',
+    icon: Scale,
+    href: '/external-competitions',
+    color: 'primary',
+    features: ['Moot Courts', 'Client Counseling', 'International Events', 'Awards']
+  },
+  {
     title: 'LSU Judicial Decisions',
     description: 'View past decisions made by the LSU Judicial Board',
     icon: Scale,

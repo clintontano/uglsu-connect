@@ -30,7 +30,7 @@ const navItems = [
   { name: 'About', href: '/about', icon: Users },
   { name: 'Events', href: '/events', icon: Calendar },
   { name: 'Notices', href: '/notices', icon: Bell },
-  { name: 'Digital Library', href: '/library', icon: Library },
+  { name: 'Legal Weed', href: 'https://drive.google.com/drive/folders/1YLrnkUUnikqahHGLEbj-fst2mgqOG3Ei?usp=sharing', icon: Library, external: true },
   { name: 'Legally Speakin', href: '/blog', icon: BookOpen },
 ];
 
@@ -65,6 +65,23 @@ export const Navigation: React.FC<NavigationProps> = ({ className }) => {
           <div className="hidden lg:flex items-center space-x-1">
             {navItems.map((item) => {
               const isActive = location.pathname === item.href;
+              if (item.external) {
+                return (
+                  <a
+                    key={item.name}
+                    href={item.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={cn(
+                      "px-3 py-2 rounded-md text-sm font-medium transition-smooth flex items-center space-x-1",
+                      "text-primary-foreground/80 hover:bg-primary-foreground/10 hover:text-primary-foreground"
+                    )}
+                  >
+                    <item.icon className="w-4 h-4" />
+                    <span>{item.name}</span>
+                  </a>
+                );
+              }
               return (
                 <Link
                   key={item.name}
@@ -113,6 +130,18 @@ export const Navigation: React.FC<NavigationProps> = ({ className }) => {
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
+                  <Link to="/contact" className="flex items-center cursor-pointer">
+                    <Phone className="w-4 h-4 mr-2" />
+                    Contact
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/external-competitions" className="flex items-center cursor-pointer">
+                    <Scale className="w-4 h-4 mr-2" />
+                    External Competitions
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
                   <Link to="/suggestions" className="flex items-center cursor-pointer">
                     <MessageSquare className="w-4 h-4 mr-2" />
                     Suggestion Box
@@ -142,16 +171,31 @@ export const Navigation: React.FC<NavigationProps> = ({ className }) => {
             <div className="px-2 pt-2 pb-3 space-y-1">
               {navItems.map((item) => {
                 const isActive = location.pathname === item.href;
+                if (item.external) {
+                  return (
+                    <a
+                      key={item.name}
+                      href={item.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className={cn(
+                        "block px-3 py-2 rounded-md text-base font-medium text-primary-foreground/80 hover:bg-primary-foreground/10 hover:text-primary-foreground transition-smooth flex items-center space-x-2"
+                      )}
+                    >
+                      <item.icon className="w-5 h-5" />
+                      <span>{item.name}</span>
+                    </a>
+                  );
+                }
                 return (
                   <Link
                     key={item.name}
                     to={item.href}
                     onClick={() => setIsMobileMenuOpen(false)}
                     className={cn(
-                      "block px-3 py-2 rounded-md text-base font-medium transition-smooth flex items-center space-x-2",
-                      isActive
-                        ? "bg-primary-foreground/10 text-primary-foreground"
-                        : "text-primary-foreground/80 hover:bg-primary-foreground/10 hover:text-primary-foreground"
+                      "block px-3 py-2 rounded-md text-base font-medium text-primary-foreground/80 hover:bg-primary-foreground/10 hover:text-primary-foreground transition-smooth flex items-center space-x-2",
+                      isActive ? "bg-primary-foreground/10 text-primary-foreground" : ""
                     )}
                   >
                     <item.icon className="w-5 h-5" />
@@ -185,6 +229,22 @@ export const Navigation: React.FC<NavigationProps> = ({ className }) => {
                 >
                   <Users className="w-5 h-5" />
                   <span>Student Services</span>
+                </Link>
+                <Link
+                  to="/contact"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block px-3 py-2 rounded-md text-base font-medium text-primary-foreground/80 hover:bg-primary-foreground/10 hover:text-primary-foreground transition-smooth flex items-center space-x-2"
+                >
+                  <Phone className="w-5 h-5" />
+                  <span>Contact</span>
+                </Link>
+                <Link
+                  to="/external-competitions"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block px-3 py-2 rounded-md text-base font-medium text-primary-foreground/80 hover:bg-primary-foreground/10 hover:text-primary-foreground transition-smooth flex items-center space-x-2"
+                >
+                  <Scale className="w-5 h-5" />
+                  <span>External Competitions</span>
                 </Link>
                 <Link
                   to="/suggestions"

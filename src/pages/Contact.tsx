@@ -11,38 +11,32 @@ const Contact = () => {
     {
       icon: <Phone className="w-6 h-6" />,
       title: "Phone",
-      details: ["+233 30 213 7348", "+233 24 123 4567"],
+      details: ["+233 55 154 4080"],
       description: "General inquiries and support"
     },
     {
       icon: <Mail className="w-6 h-6" />,
       title: "Email",
-      details: ["info@uglsu.org", "president@uglsu.org"],
+      details: ["lawstudentsunion.ug@gmail.com"],
       description: "For detailed inquiries and official communications"
     },
     {
       icon: <MapPin className="w-6 h-6" />,
-      title: "Office Location",
-      details: ["University of Ghana Law Faculty", "UGLSU Secretariat, Room 204"],
-      description: "Visit us during office hours"
-    },
-    {
-      icon: <Clock className="w-6 h-6" />,
-      title: "Office Hours",
-      details: ["Monday - Friday: 8:00 AM - 5:00 PM", "Saturday: 9:00 AM - 2:00 PM"],
-      description: "When you can find us in the office"
+      title: "Location",
+      details: ["Accra, UG Campus, Annie Jiagge Road."],
+      description: "Our physical office location"
     }
   ];
 
   const emergencyContacts = [
     {
       title: "Student Emergency Line",
-      number: "+233 24 567 8901",
+      number: "+233 55 154 4080",
       description: "24/7 emergency support for student crises"
     },
     {
       title: "Academic Support",
-      number: "+233 30 213 7349",
+      number: "+233 55 251 7929",
       description: "Urgent academic matters and exam issues"
     }
   ];
@@ -67,7 +61,7 @@ const Contact = () => {
       linkedin: "https://linkedin.com/in/husna-ayariga-56a854212",
     },
     {
-      position: "General Secretary",
+      position: "Organising Secretary",
       name: "GILBERT TINADAGA S.",
       email: "tinadagasongze@gmail.com",
       linkedin: "",
@@ -99,7 +93,7 @@ const Contact = () => {
           {/* Contact Methods */}
           <section className="mb-16">
             <h2 className="text-2xl font-heading font-semibold mb-8">How to Reach Us</h2>
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+            <div className="grid gap-6 md:grid-cols-3 lg:grid-cols-3">
               {contactMethods.map((method, index) => (
                 <Card key={index} className="text-center hover:shadow-elegant transition-shadow">
                   <CardHeader>
@@ -253,48 +247,9 @@ const Contact = () => {
             </Card>
           </section>
 
-          {/* Location & Directions */}
-          <section>
-            <h2 className="text-2xl font-heading font-semibold mb-8">Find Us</h2>
-            <Card>
-              <CardHeader>
-                <CardTitle>University of Ghana Law Faculty</CardTitle>
-                <CardDescription>
-                  UGLSU Secretariat, Room 204, Second Floor
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-6">
-                  <p className="text-muted-foreground">
-                    Located within the University of Ghana Law Faculty building. 
-                    Take the main stairs to the second floor and look for Room 204.
-                  </p>
-                  
-                  <MapComponent 
-                    latitude={5.654227958261955}
-                    longitude={-0.1832381679321753}
-                    zoom={16}
-                  />
-                  
-                  <div className="flex justify-center">
-                    <Button variant="outline" asChild>
-                      <a 
-                        href="https://www.google.com/maps/search/?api=1&query=5.654227958261955,-0.1832381679321753"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <MapPin className="w-4 h-4 mr-2" />
-                        Open in Google Maps
-                      </a>
-                    </Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </section>
+          <Footer />
         </div>
       </main>
-      <Footer />
     </div>
   );
 };

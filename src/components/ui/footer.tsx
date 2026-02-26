@@ -18,9 +18,10 @@ const footerSections = [
     links: [
       { name: 'About UGLSU', href: '/about' },
       { name: 'Executive Committee', href: '/about#executive' },
-      { name: 'Digital Library', href: '/library' },
+      { name: 'Legal Weed', href: 'https://drive.google.com/drive/folders/1YLrnkUUnikqahHGLEbj-fst2mgqOG3Ei?usp=sharing', external: true },
       { name: 'Events Calendar', href: '/events' },
       { name: 'Contact Us', href: '/contact' },
+      { name: 'External Competitions', href: '/external-competitions' },
       { name: 'Suggestion Box', href: '/suggestions' },
       { name: 'Admin Access', href: '/auth' },
     ]
@@ -120,7 +121,7 @@ export const Footer: React.FC = () => {
             <div className="space-y-3">
               <div className="flex items-center space-x-3">
                 <Mail className="w-4 h-4 text-accent" />
-                <span className="text-sm">lawstudents.ug@gmail.com</span>
+                <span className="text-sm">lawstudentsunion.ug@gmail.com</span>
               </div>
               <div className="flex items-center space-x-3">
                 <Phone className="w-4 h-4 text-accent" />
@@ -128,7 +129,7 @@ export const Footer: React.FC = () => {
               </div>
               <div className="flex items-center space-x-3">
                 <MapPin className="w-4 h-4 text-accent" />
-                <span className="text-sm">UG School of Law Campus</span>
+                <span className="text-sm">Accra, UG Campus, Annie Jiagge Road.</span>
               </div>
             </div>
           </div>
@@ -140,12 +141,14 @@ export const Footer: React.FC = () => {
               <ul className="space-y-3">
                 {section.links.map((link) => (
                   <li key={link.name}>
-                    <Link
-                      to={link.href}
-                      className="text-primary-foreground/80 hover:text-primary-foreground transition-smooth text-sm flex items-center group"
-                    >
-                      {link.name}
-                      {link.href.startsWith('http') && (
+                    {link.external ? (
+                      <a
+                        href={link.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-primary-foreground/80 hover:text-primary-foreground transition-smooth text-sm flex items-center group"
+                      >
+                        {link.name}
                         <svg 
                           xmlns="http://www.w3.org/2000/svg" 
                           viewBox="0 0 24 24" 
@@ -156,12 +159,17 @@ export const Footer: React.FC = () => {
                           strokeLinejoin="round" 
                           className="w-3 h-3 ml-1 opacity-0 group-hover:opacity-100 transition-opacity"
                         >
-                          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-                          <path d="M15 3h6v6" />
-                          <path d="M10 14L21 3" />
+                          <path d="M7 17l9.2-9.2M17 17l-9.2-9.2M7 7l9.2 9.2"/>
                         </svg>
-                      )}
-                    </Link>
+                      </a>
+                    ) : (
+                      <Link
+                        to={link.href}
+                        className="text-primary-foreground/80 hover:text-primary-foreground transition-smooth text-sm flex items-center group"
+                      >
+                        {link.name}
+                      </Link>
+                    )}
                   </li>
                 ))}
               </ul>
@@ -198,7 +206,7 @@ export const Footer: React.FC = () => {
             <span className="text-sm text-primary-foreground/90 font-medium">51st UGLSU Administration</span>
           </div>
           <div className="text-sm text-primary-foreground/80 mb-4 md:mb-0">
-            © 2025 University of Ghana Law Students' Union. All rights reserved.
+            © 2026 University of Ghana Law Students' Union. All rights reserved.
           </div>
 
           {/* Powered by RoomBerl LTD */}

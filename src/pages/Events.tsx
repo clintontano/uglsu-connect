@@ -240,13 +240,6 @@ const Events = () => {
                         <CardHeader>
                           <div className="flex items-start justify-between">
                             <div className="flex-1">
-                              <div className="flex items-center space-x-2 mb-2">
-                                {event.registration_open && (
-                                  <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-                                    Registration Open
-                                  </Badge>
-                                )}
-                              </div>
                               <CardTitle className="text-xl">{event.title}</CardTitle>
                             </div>
                           </div>
@@ -271,17 +264,8 @@ const Events = () => {
                               <MapPin className="w-4 h-4 mr-2" />
                               <span>{event.location}</span>
                             </div>
-                            {event.attendees !== null && (
-                              <div className="flex items-center text-sm text-muted-foreground">
-                                <Users className="w-4 h-4 mr-2" />
-                                <span>{event.attendees} attendees expected</span>
-                              </div>
-                            )}
                           </div>
 
-                          {event.registration_open && (
-                            <Button className="w-full">Register Now</Button>
-                          )}
                         </CardContent>
                       </Card>
                     ))}

@@ -4,15 +4,11 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { LogOut, Calendar, Bell, BookOpen, Newspaper, Mail, Users, MessageSquare, Scale } from "lucide-react";
+import { LogOut, Calendar, BookOpen, Briefcase, Scale } from "lucide-react";
 import EventsManager from "@/components/admin/EventsManager";
-import NoticesManager from "@/components/admin/NoticesManager";
 import LibraryManager from "@/components/admin/LibraryManager";
-import BlogManager from "@/components/admin/BlogManager";
-import CommunityMembersManager from "@/components/admin/CommunityMembersManager";
-import NewsletterManager from "@/components/admin/NewsletterManager";
-import SuggestionsManager from "@/components/admin/SuggestionsManager";
-import JudicialDecisionsManager from "@/components/admin/JudicialDecisionsManager";
+import LawFirmsManager from "@/components/admin/LawFirmsManager";
+import ExternalCompetitionsManager from "@/components/admin/ExternalCompetitionsManager";
 
 const Admin = () => {
   const [loading, setLoading] = useState(true);
@@ -89,61 +85,28 @@ const Admin = () => {
             Events
           </Button>
           <Button
-            variant={activeTab === "notices" ? "default" : "ghost"}
-            className="w-full justify-start"
-            onClick={() => setActiveTab("notices")}
-          >
-            <Bell className="mr-2 h-4 w-4" />
-            Notices
-          </Button>
-          <Button
             variant={activeTab === "library" ? "default" : "ghost"}
             className="w-full justify-start"
             onClick={() => setActiveTab("library")}
           >
             <BookOpen className="mr-2 h-4 w-4" />
-            Library
+            Library (Image Uploads)
           </Button>
           <Button
-            variant={activeTab === "blog" ? "default" : "ghost"}
+            variant={activeTab === "lawfirms" ? "default" : "ghost"}
             className="w-full justify-start"
-            onClick={() => setActiveTab("blog")}
+            onClick={() => setActiveTab("lawfirms")}
           >
-            <Newspaper className="mr-2 h-4 w-4" />
-            Blog
-          </Button>
-          <div className="border-t my-2"></div>
-          <Button
-            variant={activeTab === "community" ? "default" : "ghost"}
-            className="w-full justify-start"
-            onClick={() => setActiveTab("community")}
-          >
-            <Users className="mr-2 h-4 w-4" />
-            Community Members
+            <Briefcase className="mr-2 h-4 w-4" />
+            Law Firms
           </Button>
           <Button
-            variant={activeTab === "newsletter" ? "default" : "ghost"}
+            variant={activeTab === "competitions" ? "default" : "ghost"}
             className="w-full justify-start"
-            onClick={() => setActiveTab("newsletter")}
-          >
-            <Mail className="mr-2 h-4 w-4" />
-            Newsletter
-          </Button>
-          <Button
-            variant={activeTab === "suggestions" ? "default" : "ghost"}
-            className="w-full justify-start"
-            onClick={() => setActiveTab("suggestions")}
-          >
-            <MessageSquare className="mr-2 h-4 w-4" />
-            Suggestions
-          </Button>
-          <Button
-            variant={activeTab === "judicial" ? "default" : "ghost"}
-            className="w-full justify-start"
-            onClick={() => setActiveTab("judicial")}
+            onClick={() => setActiveTab("competitions")}
           >
             <Scale className="mr-2 h-4 w-4" />
-            Judicial Decisions
+            External Competitions
           </Button>
         </nav>
         <div className="p-4 border-t">
@@ -169,33 +132,18 @@ const Admin = () => {
               <EventsManager />
             </TabsContent>
 
-            <TabsContent value="notices">
-              <NoticesManager />
-            </TabsContent>
-
             <TabsContent value="library">
               <LibraryManager />
             </TabsContent>
 
-            <TabsContent value="blog">
-              <BlogManager />
+            <TabsContent value="lawfirms">
+              <LawFirmsManager />
             </TabsContent>
 
-            <TabsContent value="community">
-              <CommunityMembersManager />
+            <TabsContent value="competitions">
+              <ExternalCompetitionsManager />
             </TabsContent>
 
-            <TabsContent value="newsletter">
-              <NewsletterManager />
-            </TabsContent>
-
-            <TabsContent value="suggestions">
-              <SuggestionsManager />
-            </TabsContent>
-
-            <TabsContent value="judicial">
-              <JudicialDecisionsManager />
-            </TabsContent>
           </Tabs>
         </div>
       </main>
