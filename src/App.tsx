@@ -24,8 +24,9 @@ import AcademicSupport from "./pages/AcademicSupport";
 import InternshipAccess from "./pages/InternshipAccess";
 import JudicialDecisions from "./pages/JudicialDecisions";
 import LawFirms from "./pages/LawFirms";
-import NotFound from "./pages/NotFound";
 import LeadAttorneys from "./pages/LeadAttorneys";
+import RebelLegal from "./pages/law-firms/rebel-legal";
+import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
@@ -57,6 +58,7 @@ const App = () => (
           <Route path="/internship" element={<InternshipAccess />} />
           <Route path="/judicial-decisions" element={<JudicialDecisions />} />
           <Route path="/law-firms" element={<LawFirms />} />
+          <Route path="/law-firms/rebel-legal" element={<RebelLegal />} />
           <Route path="/law-firms/lead-attorneys" element={<LeadAttorneys />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
