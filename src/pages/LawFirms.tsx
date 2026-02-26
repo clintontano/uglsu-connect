@@ -16,6 +16,7 @@ const sampleLawFirms = [
   { name: "VERITAS CHAMBERS", logo: null, detailRoute: null },
   { name: "TOP HILL SQUARE", logo: null, detailRoute: null },
   { name: "M&M LEGAL CONSULT", logo: null, detailRoute: null },
+  { name: "Rebel Legal", logo: null, detailRoute: null },
 ];
 
 const LawFirms = () => {
