@@ -122,6 +122,57 @@ export type Database = {
         }
         Relationships: []
       }
+      external_competitions: {
+        Row: {
+          application_guidelines: string | null
+          created_at: string | null
+          deadline: string
+          description: string
+          id: string
+          image_url: string | null
+          level: string
+          location: string
+          organizer: string
+          participants: string
+          status: string
+          title: string
+          type: string
+          updated_at: string | null
+        }
+        Insert: {
+          application_guidelines?: string | null
+          created_at?: string | null
+          deadline?: string
+          description?: string
+          id?: string
+          image_url?: string | null
+          level: string
+          location?: string
+          organizer: string
+          participants?: string
+          status?: string
+          title: string
+          type: string
+          updated_at?: string | null
+        }
+        Update: {
+          application_guidelines?: string | null
+          created_at?: string | null
+          deadline?: string
+          description?: string
+          id?: string
+          image_url?: string | null
+          level?: string
+          location?: string
+          organizer?: string
+          participants?: string
+          status?: string
+          title?: string
+          type?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       judicial_decisions: {
         Row: {
           created_at: string | null
@@ -149,6 +200,57 @@ export type Database = {
           pdf_url?: string
           title?: string
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      law_firms: {
+        Row: {
+          address: string
+          created_at: string | null
+          description: string
+          email: string
+          founded_year: number | null
+          id: string
+          logo_url: string | null
+          name: string
+          partner_count: number | null
+          phone: string
+          practice_areas: string[] | null
+          status: string
+          updated_at: string | null
+          website: string
+        }
+        Insert: {
+          address?: string
+          created_at?: string | null
+          description?: string
+          email?: string
+          founded_year?: number | null
+          id?: string
+          logo_url?: string | null
+          name: string
+          partner_count?: number | null
+          phone?: string
+          practice_areas?: string[] | null
+          status?: string
+          updated_at?: string | null
+          website?: string
+        }
+        Update: {
+          address?: string
+          created_at?: string | null
+          description?: string
+          email?: string
+          founded_year?: number | null
+          id?: string
+          logo_url?: string | null
+          name?: string
+          partner_count?: number | null
+          phone?: string
+          practice_areas?: string[] | null
+          status?: string
+          updated_at?: string | null
+          website?: string
         }
         Relationships: []
       }
