@@ -147,6 +147,17 @@ export const Navigation: React.FC<NavigationProps> = ({ className }) => {
                     Suggestion Box
                   </Link>
                 </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <a 
+                    href="https://law.ug.edu.gh/" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="flex items-center cursor-pointer"
+                  >
+                    <Scale className="w-4 h-4 mr-2" />
+                    Go to UGSOL
+                  </a>
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
@@ -254,6 +265,16 @@ export const Navigation: React.FC<NavigationProps> = ({ className }) => {
                   <MessageSquare className="w-5 h-5" />
                   <span>Suggestion Box</span>
                 </Link>
+                <a
+                  href="https://law.ug.edu.gh/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block px-3 py-2 rounded-md text-base font-medium text-primary-foreground/80 hover:bg-primary-foreground/10 hover:text-primary-foreground transition-smooth flex items-center space-x-2"
+                >
+                  <Scale className="w-5 h-5" />
+                  <span>Go to UGSOL</span>
+                </a>
               </div>
             </div>
           </div>

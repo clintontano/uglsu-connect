@@ -3,6 +3,7 @@ import { Navigation } from '@/components/ui/navigation';
 import { HeroSection } from '@/components/sections/hero';
 import { AboutExcerptSection } from '@/components/sections/about-excerpt';
 import { QuickLinksSection } from '@/components/sections/quick-links';
+import { UniversityOfGhanaSchoolOfLawSection } from '@/components/sections/university-of-ghana-school-of-law';
 import { SuggestionBoxSection } from '@/components/sections/suggestion-box';
 import { Footer } from '@/components/ui/footer';
 import { GiveToUGSoLSection } from '@/components/sections/give-to-ugsol';
@@ -15,6 +16,7 @@ const Index = () => {
         <HeroSection />
         <QuickLinksSection />
         <AboutExcerptSection />
+        <UniversityOfGhanaSchoolOfLawSection />
         <GiveToUGSoLSection />
         <SuggestionBoxSection />
       </main>

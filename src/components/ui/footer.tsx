@@ -23,6 +23,7 @@ const footerSections = [
       { name: 'Contact Us', href: '/contact' },
       { name: 'External Competitions', href: '/external-competitions' },
       { name: 'Suggestion Box', href: '/suggestions' },
+      { name: 'Go to UGSOL', href: 'https://law.ug.edu.gh/', external: true },
       { name: 'Admin Access', href: '/auth' },
     ]
   },

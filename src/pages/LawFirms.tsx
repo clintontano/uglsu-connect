@@ -2,34 +2,38 @@ import { useState, useEffect } from "react";
 import { Navigation } from "@/components/ui/navigation";
 import { Footer } from "@/components/ui/footer";
 import { Card } from "@/components/ui/card";
-import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import LawFirmDetailModal from "@/components/LawFirmDetailModal";
 
-const sampleLawFirms = [
-  { name: "IURIS POINTIS", logo: null, detailRoute: null },
-  { name: "LEX APEX", logo: null, detailRoute: null },
-  { name: "PIESIE LEGAL CONSULT", logo: null, detailRoute: null },
-  { name: "NSAA CHAMBERS", logo: null, detailRoute: null },
-  { name: "ANIMUS DOMINI", logo: null, detailRoute: null },
-  { name: "DNA & PARTNERS", logo: null, detailRoute: null },
-  { name: "LEAD ATTORNEYS", logo: "/lead-attorneys-logo.jpeg", detailRoute: "/law-firms/lead-attorneys" },
-  { name: "VERITAS CHAMBERS", logo: null, detailRoute: null },
-  { name: "TOP HILL SQUARE", logo: null, detailRoute: null },
-  { name: "M&M LEGAL CONSULT", logo: null, detailRoute: null },
-  { name: "REBEL LEGAL", logo: null, detailRoute: "/law-firms/rebel-legal" },
-];
+interface LawFirm {
+  id: string;
+  name: string;
+  description: string;
+  address: string;
+  phone: string;
+  email: string;
+  website: string;
+  logo_url: string | null;
+  practice_areas: string[];
+  founded_year: number | null;
+  partner_count: number | null;
+  status: string;
+  created_at: string;
+  updated_at: string;
+}
 
 const LawFirms = () => {
-  const [lawFirms, setLawFirms] = useState(sampleLawFirms);
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+  const [lawFirms, setLawFirms] = useState<LawFirm[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedFirm, setSelectedFirm] = useState<LawFirm | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const fetchLawFirms = async () => {
     try {
       const { data, error } = await supabase
         .from("law_firms")
         .select("*")
-        .eq("is_active", true)
+        .eq("status", "active")
         .order("name");
 
       if (error) {
@@ -43,6 +47,21 @@ const LawFirms = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchLawFirms();
+  }, []);
+
+  const handleFirmClick = (firm: LawFirm) => {
+    setSelectedFirm(firm);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedFirm(null);
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navigation />
@@ -68,29 +87,34 @@ const LawFirms = () => {
                 <p className="text-muted-foreground">Check back later for updates</p>
               </div>
             ) : (
-              <div className="grid gap-8 grid-cols-2 md:grid-cols-3 lg:grid-cols-5 justify-items-center">
+              <div className="grid gap-8 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 justify-items-center">
                 {lawFirms.map((firm) => (
                   <Card
                     key={firm.id}
-                    className={`w-full max-w-[180px] p-5 flex flex-col items-center justify-center cursor-pointer transition-shadow group hover:shadow-xl border-2 border-muted ${firm.logo ? "hover:border-primary" : ""}`}
-                    onClick={() => firm.detailRoute && navigate(firm.detailRoute)}
+                    className="w-full max-w-[200px] p-5 flex flex-col items-center justify-center cursor-pointer transition-all group hover:shadow-xl border-2 border-muted hover:border-primary hover:scale-105"
+                    onClick={() => handleFirmClick(firm)}
                   >
-                    {firm.logo ? (
+                    {firm.logo_url ? (
                       <img
-                        src={firm.logo}
+                        src={firm.logo_url}
                         alt={firm.name + " logo"}
-                        className="h-20 w-20 object-cover rounded-full mx-auto mb-4 border shadow group-hover:scale-105 transition-transform"
+                        className="h-20 w-20 object-cover rounded-full mx-auto mb-4 border shadow group-hover:scale-110 transition-transform"
                       />
                     ) : (
-                      <div className="h-20 w-20 rounded-full bg-muted text-gray-400 flex items-center justify-center text-3xl font-bold mb-4 border">
-                        {/* If no logo, use initials or ? */}
+                      <div className="h-20 w-20 rounded-full bg-muted text-gray-400 flex items-center justify-center text-2xl font-bold mb-4 border">
                         {firm.name
                           .split(" ")
                           .map((part) => part[0])
-                          .join("")}
+                          .join("")
+                          .slice(0, 2)}
                       </div>
                     )}
-                    <h2 className="text-base font-semibold text-center mb-1">{firm.name}</h2>
+                    <h2 className="text-base font-semibold text-center mb-1 group-hover:text-primary transition-colors">
+                      {firm.name}
+                    </h2>
+                    <p className="text-xs text-muted-foreground text-center">
+                      Click for details
+                    </p>
                   </Card>
                 ))}
               </div>
@@ -99,6 +123,12 @@ const LawFirms = () => {
         </section>
       </main>
       <Footer />
+      
+      <LawFirmDetailModal
+        firm={selectedFirm}
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+      />
     </div>
   );
 };

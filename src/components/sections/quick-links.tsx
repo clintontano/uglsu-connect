@@ -16,12 +16,13 @@ import {
 
 const quickLinks = [
   {
-    title: 'Digital Library',
+    title: 'Legal Weed',
     description: 'Access legal resources, case studies, and academic materials',
     icon: Library,
-    href: '/library',
+    href: 'https://drive.google.com/drive/folders/1YLrnkUUnikqahHGLEbj-fst2mgqOG3Ei',
     color: 'library-primary',
-    features: ['Case Law', 'Legal Articles', 'Past Papers', 'Study Guides']
+    features: ['Case Law', 'Legal Articles', 'Past Papers', 'Study Guides'],
+    external: true
   },
   {
     title: 'Legally Speakin',
@@ -125,10 +126,22 @@ export const QuickLinksSection: React.FC = () => {
                   className="w-full bg-foreground text-background hover:bg-foreground/90 hover:text-white" 
                   asChild
                 >
-                  <Link to={link.href} className="group flex items-center justify-center space-x-2">
-                    <span className="group-hover:text-white">Explore</span>
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform group-hover:text-white" />
-                  </Link>
+                  {link.external ? (
+                    <a 
+                      href={link.href} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="group flex items-center justify-center space-x-2"
+                    >
+                      <span className="group-hover:text-white">Explore</span>
+                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform group-hover:text-white" />
+                    </a>
+                  ) : (
+                    <Link to={link.href} className="group flex items-center justify-center space-x-2">
+                      <span className="group-hover:text-white">Explore</span>
+                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform group-hover:text-white" />
+                    </Link>
+                  )}
                 </Button>
               </CardContent>
             </Card>

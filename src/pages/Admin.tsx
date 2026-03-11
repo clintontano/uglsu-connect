@@ -4,11 +4,28 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { LogOut, Calendar, BookOpen, Briefcase, Scale } from "lucide-react";
+import { 
+  LogOut, 
+  Calendar, 
+  BookOpen, 
+  Briefcase, 
+  Scale, 
+  FileText,
+  Users,
+  Mail,
+  MessageSquare,
+  Gavel
+} from "lucide-react";
 import EventsManager from "@/components/admin/EventsManager";
 import LibraryManager from "@/components/admin/LibraryManager";
 import LawFirmsManager from "@/components/admin/LawFirmsManager";
 import ExternalCompetitionsManager from "@/components/admin/ExternalCompetitionsManager";
+import BlogManager from "@/components/admin/BlogManager";
+import CommunityMembersManager from "@/components/admin/CommunityMembersManager";
+import JudicialDecisionsManager from "@/components/admin/JudicialDecisionsManager";
+import NewsletterManager from "@/components/admin/NewsletterManager";
+import NoticesManager from "@/components/admin/NoticesManager";
+import SuggestionsManager from "@/components/admin/SuggestionsManager";
 
 const Admin = () => {
   const [loading, setLoading] = useState(true);
@@ -84,16 +101,54 @@ const Admin = () => {
             <Calendar className="mr-2 h-4 w-4" />
             Events
           </Button>
-          {/* Temporarily hidden Library section
           <Button
-            variant={activeTab === "library" ? "default" : "ghost"}
+            variant={activeTab === "notices" ? "default" : "ghost"}
             className="w-full justify-start"
-            onClick={() => setActiveTab("library")}
+            onClick={() => setActiveTab("notices")}
+          >
+            <FileText className="mr-2 h-4 w-4" />
+            Notices
+          </Button>
+          <Button
+            variant={activeTab === "blog" ? "default" : "ghost"}
+            className="w-full justify-start"
+            onClick={() => setActiveTab("blog")}
           >
             <BookOpen className="mr-2 h-4 w-4" />
-            Library (Image Uploads)
+            Blog Posts
           </Button>
-          */}
+          <Button
+            variant={activeTab === "judicial" ? "default" : "ghost"}
+            className="w-full justify-start"
+            onClick={() => setActiveTab("judicial")}
+          >
+            <Gavel className="mr-2 h-4 w-4" />
+            Judicial Decisions
+          </Button>
+          <Button
+            variant={activeTab === "community" ? "default" : "ghost"}
+            className="w-full justify-start"
+            onClick={() => setActiveTab("community")}
+          >
+            <Users className="mr-2 h-4 w-4" />
+            Community Members
+          </Button>
+          <Button
+            variant={activeTab === "newsletter" ? "default" : "ghost"}
+            className="w-full justify-start"
+            onClick={() => setActiveTab("newsletter")}
+          >
+            <Mail className="mr-2 h-4 w-4" />
+            Newsletter
+          </Button>
+          <Button
+            variant={activeTab === "suggestions" ? "default" : "ghost"}
+            className="w-full justify-start"
+            onClick={() => setActiveTab("suggestions")}
+          >
+            <MessageSquare className="mr-2 h-4 w-4" />
+            Suggestions
+          </Button>
           <Button
             variant={activeTab === "lawfirms" ? "default" : "ghost"}
             className="w-full justify-start"
@@ -109,6 +164,14 @@ const Admin = () => {
           >
             <Scale className="mr-2 h-4 w-4" />
             External Competitions
+          </Button>
+          <Button
+            variant={activeTab === "library" ? "default" : "ghost"}
+            className="w-full justify-start"
+            onClick={() => setActiveTab("library")}
+          >
+            <BookOpen className="mr-2 h-4 w-4" />
+            Library (Image Uploads)
           </Button>
         </nav>
         <div className="p-4 border-t">
@@ -134,11 +197,29 @@ const Admin = () => {
               <EventsManager />
             </TabsContent>
 
-            {/* Temporarily hidden Library section
-            <TabsContent value="library">
-              <LibraryManager />
+            <TabsContent value="notices">
+              <NoticesManager />
             </TabsContent>
-            */}
+
+            <TabsContent value="blog">
+              <BlogManager />
+            </TabsContent>
+
+            <TabsContent value="judicial">
+              <JudicialDecisionsManager />
+            </TabsContent>
+
+            <TabsContent value="community">
+              <CommunityMembersManager />
+            </TabsContent>
+
+            <TabsContent value="newsletter">
+              <NewsletterManager />
+            </TabsContent>
+
+            <TabsContent value="suggestions">
+              <SuggestionsManager />
+            </TabsContent>
 
             <TabsContent value="lawfirms">
               <LawFirmsManager />
@@ -146,6 +227,10 @@ const Admin = () => {
 
             <TabsContent value="competitions">
               <ExternalCompetitionsManager />
+            </TabsContent>
+
+            <TabsContent value="library">
+              <LibraryManager />
             </TabsContent>
 
           </Tabs>

@@ -21,6 +21,7 @@ interface Event {
   time: string;
   location: string;
   flyer_url: string | null;
+  photo_gallery_url?: string | null;
   attendees: number;
   status: string;
   registration_open: boolean;
@@ -36,6 +37,7 @@ const EventsManager = () => {
     time: "",
     location: "",
     flyer_url: "",
+    photo_gallery_url: "",
     attendees: 0,
     status: "upcoming",
     registration_open: true,
@@ -125,6 +127,7 @@ const EventsManager = () => {
       time: event.time,
       location: event.location,
       flyer_url: event.flyer_url || "",
+      photo_gallery_url: event.photo_gallery_url || "",
       attendees: event.attendees,
       status: event.status,
       registration_open: event.registration_open,
@@ -155,6 +158,7 @@ const EventsManager = () => {
       time: "",
       location: "",
       flyer_url: "",
+      photo_gallery_url: "",
       attendees: 0,
       status: "upcoming",
       registration_open: true,
@@ -198,6 +202,18 @@ const EventsManager = () => {
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                 required
               />
+            </div>
+            <div className="space-y-2">
+              <Label>Photo Gallery URL (for past events)</Label>
+              <Input
+                value={formData.photo_gallery_url}
+                onChange={(e) => setFormData({ ...formData, photo_gallery_url: e.target.value })}
+                placeholder="https://drive.google.com/..."
+                type="url"
+              />
+              <p className="text-sm text-muted-foreground">
+                Add a link to photo gallery for events that have already occurred
+              </p>
             </div>
             <div className="grid grid-cols-3 gap-4">
               <div className="space-y-2">
@@ -275,6 +291,7 @@ const EventsManager = () => {
                 <TableHead>Date</TableHead>
                 <TableHead>Location</TableHead>
                 <TableHead>Has Flyer</TableHead>
+                <TableHead>Photo Gallery</TableHead>
                 <TableHead>Actions</TableHead>
               </TableRow>
             </TableHeader>
@@ -285,6 +302,20 @@ const EventsManager = () => {
                   <TableCell>{event.date}</TableCell>
                   <TableCell>{event.location}</TableCell>
                   <TableCell>{event.flyer_url ? "Yes" : "No"}</TableCell>
+                  <TableCell>
+                    {event.photo_gallery_url ? (
+                      <a
+                        href={event.photo_gallery_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-primary hover:underline"
+                      >
+                        View Gallery
+                      </a>
+                    ) : (
+                      <span className="text-muted-foreground">No</span>
+                    )}
+                  </TableCell>
                   <TableCell>
                     <div className="flex gap-2">
                       <Button size="sm" variant="outline" onClick={() => handleEdit(event)}>

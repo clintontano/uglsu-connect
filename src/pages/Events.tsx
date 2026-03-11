@@ -5,7 +5,7 @@ import { Footer } from '@/components/ui/footer';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Calendar as CalendarIcon, MapPin, Users, Clock, Plus } from 'lucide-react';
+import { Calendar as CalendarIcon, MapPin, Users, Clock, Plus, Camera } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { Calendar, dateFnsLocalizer } from 'react-big-calendar';
@@ -33,6 +33,7 @@ interface Event {
   time: string;
   location: string;
   flyer_url: string | null;
+  photo_gallery_url?: string | null;
   attendees: number | null;
   status: string | null;
   registration_open: boolean | null;
@@ -281,8 +282,28 @@ const Events = () => {
                     {recentEvents.slice(0, 6).map((event) => (
                       <Card key={event.id} className="opacity-80">
                         <CardHeader>
-                          <div className="flex items-center space-x-2 mb-2">
-                            <Badge variant="secondary">Completed</Badge>
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center space-x-2 mb-2">
+                              <Badge variant="secondary">Completed</Badge>
+                            </div>
+                            {event.photo_gallery_url && (
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                asChild
+                                className="ml-auto"
+                              >
+                                <a
+                                  href={event.photo_gallery_url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="flex items-center gap-2"
+                                >
+                                  <Camera className="w-4 h-4" />
+                                  Photos
+                                </a>
+                              </Button>
+                            )}
                           </div>
                           <CardTitle className="text-lg">{event.title}</CardTitle>
                         </CardHeader>
