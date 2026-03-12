@@ -71,7 +71,7 @@ const ExternalCompetitionsManager = () => {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setCompetitions(data || []);
+      setCompetitions((data as ExternalCompetition[]) || []);
     } catch (error: any) {
       toast({
         title: "Error",

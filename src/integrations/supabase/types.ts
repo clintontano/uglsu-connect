@@ -86,6 +86,7 @@ export type Database = {
           flyer_url: string | null
           id: string
           location: string
+          photo_gallery_url: string | null
           registration_open: boolean | null
           status: string | null
           time: string
@@ -100,6 +101,7 @@ export type Database = {
           flyer_url?: string | null
           id?: string
           location: string
+          photo_gallery_url?: string | null
           registration_open?: boolean | null
           status?: string | null
           time: string
@@ -114,6 +116,7 @@ export type Database = {
           flyer_url?: string | null
           id?: string
           location?: string
+          photo_gallery_url?: string | null
           registration_open?: boolean | null
           status?: string | null
           time?: string
