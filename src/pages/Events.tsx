@@ -291,7 +291,7 @@ const Events = () => {
                                 size="sm"
                                 variant="outline"
                                 asChild
-                                className="ml-auto"
+                                className="ml-auto bg-yellow-400 hover:bg-yellow-500 text-black border-yellow-400"
                               >
                                 <a
                                   href={event.photo_gallery_url}
