@@ -22,7 +22,8 @@ import {
   ChevronDown,
   Scale,
   Briefcase,
-  MessageSquare
+  MessageSquare,
+  Music
 } from 'lucide-react';
 
 const navItems = [
@@ -148,6 +149,17 @@ export const Navigation: React.FC<NavigationProps> = ({ className }) => {
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
+                  <a
+                    href="https://open.spotify.com/user/31ppaqhcmf2apz6lbpsvycyunh5m"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center cursor-pointer"
+                  >
+                    <Music className="w-4 h-4 mr-2" />
+                    UGLSU on Spotify
+                  </a>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
                   <a 
                     href="https://law.ug.edu.gh/" 
                     target="_blank" 
@@ -265,6 +277,16 @@ export const Navigation: React.FC<NavigationProps> = ({ className }) => {
                   <MessageSquare className="w-5 h-5" />
                   <span>Suggestion Box</span>
                 </Link>
+                <a
+                  href="https://open.spotify.com/user/31ppaqhcmf2apz6lbpsvycyunh5m"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block px-3 py-2 rounded-md text-base font-medium text-primary-foreground/80 hover:bg-primary-foreground/10 hover:text-primary-foreground transition-smooth flex items-center space-x-2"
+                >
+                  <Music className="w-5 h-5" />
+                  <span>UGLSU on Spotify</span>
+                </a>
                 <a
                   href="https://law.ug.edu.gh/"
                   target="_blank"
